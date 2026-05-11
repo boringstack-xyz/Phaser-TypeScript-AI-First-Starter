@@ -36,8 +36,8 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "phaser": "4.0.0",
-    "zod": "4.3.6"
+    "phaser": "4.1.0",
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@commitlint/cli": "20.5.0",
