@@ -10,9 +10,11 @@ const base = resolve(process.cwd(), 'src', 'runtime', 'phaser', 'scenes', Name);
 const key = Name.replace(/Scene$/, '');
 
 const files: Record<string, string> = {
-  [`${base}/${Name}.constants.ts`]: `export const ${key.toUpperCase()}_SCENE_KEY = '${key}';
+  [`${base}/${Name}.constants.ts`]: `import { asSceneKey, type SceneKey } from '../sceneKeys.js';
+
+export const ${key.toUpperCase()}_SCENE_KEY: SceneKey = asSceneKey('${key}');
 `,
-  [`${base}/${Name}.setup.ts`]: `import type Phaser from 'phaser';
+  [`${base}/${Name}.setup.ts`]: `import type * as Phaser from 'phaser';
 
 export interface I${Name}Runtime {
   update: (deltaMs: number) => void;
@@ -27,7 +29,7 @@ export const setup${Name} = (scene: Phaser.Scene): I${Name}Runtime => {
   };
 };
 `,
-  [`${base}/${Name}.ts`]: `import Phaser from 'phaser';
+  [`${base}/${Name}.ts`]: `import * as Phaser from 'phaser';
 
 import { ${key.toUpperCase()}_SCENE_KEY } from './${Name}.constants.js';
 import { setup${Name}, type I${Name}Runtime } from './${Name}.setup.js';

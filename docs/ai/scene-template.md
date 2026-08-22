@@ -31,7 +31,7 @@ bun run new:scene <Name>
 └── index.ts
 ```
 
-The `.ts` class holds only lifecycle hooks. The `.setup.ts` does the wiring and returns a runtime object the class calls in `update(time, delta)`.
+The `.ts` class holds only lifecycle hooks. The `.setup.ts` does the wiring and returns a runtime object the class calls in `update(time, delta)`. Scene keys go through `asSceneKey` (never a string literal in `super()` / `scene.start`). Dispose run-lifetime resources on `Phaser.Scenes.Events.SHUTDOWN`. Do not construct GameObjects in `update()`.
 
 ## Example
 

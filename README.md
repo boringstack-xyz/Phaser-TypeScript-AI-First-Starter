@@ -82,7 +82,7 @@ Arrow keys or WASD to move. Walk onto a yellow circle to score. Press **S** to s
 
 [tsforge](https://tsforge.dev) is the BoringStack TypeScript build harness. Point it at a fork of this template; the gate is `bun run check`.
 
-A dedicated Phaser stack adapter (planner schema, conventions, greenfield clone) is planned in tsforge and **not shipped yet**. Until it lands, tsforge treats this tree as generic TypeScript — it will not inject React/Elysia conventions if no BoringStack scaffold receipt is present. Do not add a `.tsforge/scaffold-manifest.json` here; that file is how tsforge detects the fullstack template.
+The **`phaser` rule pack** auto-applies from the `phaser` dependency (scene shutdown, no factories in `update`, branded keys). A dedicated Phaser **stack adapter** (planner schema, conventions, greenfield clone) is planned and **not shipped yet**. Do not add a `.tsforge/scaffold-manifest.json` here; that file is how tsforge detects the fullstack template.
 
 ## Architecture in 30 seconds
 
