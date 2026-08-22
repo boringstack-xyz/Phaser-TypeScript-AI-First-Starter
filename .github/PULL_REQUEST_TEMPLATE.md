@@ -12,9 +12,9 @@
 
 ## Checklist
 
-- [ ] `pnpm check` passes locally
+- [ ] `bun run check` passes locally (`bun run validate` if boot/runtime changed)
 - [ ] Tests added or updated for changed domain behaviors
-- [ ] `pnpm catalog` regenerated if I added/removed modules, features, scenes, ports, or content
+- [ ] `bun run catalog` regenerated if I added/removed modules, features, scenes, ports, or content
 - [ ] ADR added under `docs/adr/` if I deviated from an architectural rule
 - [ ] Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/)
 

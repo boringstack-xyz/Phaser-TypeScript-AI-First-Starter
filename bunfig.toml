@@ -1,0 +1,11 @@
+[install]
+minimumReleaseAge = 604800
+minimumReleaseAgeExcludes = [
+  "esbuild",
+  "undici",
+  "nanoid",
+  "postcss",
+  "fast-uri",
+  "js-yaml",
+  "brace-expansion",
+]

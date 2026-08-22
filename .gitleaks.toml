@@ -1,0 +1,4 @@
+# Repo-wide gitleaks configuration. security-secrets.yml points here.
+
+[extend]
+useDefault = true

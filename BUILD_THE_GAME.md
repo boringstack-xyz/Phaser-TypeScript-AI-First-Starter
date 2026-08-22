@@ -22,7 +22,7 @@ This template answers each of those failure modes with a concrete mechanism:
 | Failure mode               | Mechanism                                                                 |
 | -------------------------- | ------------------------------------------------------------------------- |
 | Invented structure         | `eslint-plugin-boundaries` + `dependency-cruiser` enforce layer rules    |
-| Re-derived boilerplate     | `pnpm new:*` generators produce the canonical file layout                |
+| Re-derived boilerplate     | `bun run new:*` generators produce the canonical file layout                |
 | Architectural drift        | `.specify/memory/constitution.md` + ADRs require deviations to be named  |
 | Forgotten state            | `docs/ai/catalog.md` (auto-generated) lists every module, feature, scene |
 
@@ -67,7 +67,7 @@ Every non-trivial change walks the same pipeline: specify → clarify → plan �
 Click **"Use this template"** on the GitHub page. Give your new repo a name. Clone locally.
 
 ```sh
-gh repo create my-game --template <your-org>/phaser-ts-starter --public --clone
+gh repo create my-game --template boringstack-xyz/Phaser-TypeScript-AI-First-Starter --public --clone
 cd my-game
 ```
 
@@ -80,18 +80,21 @@ sed -i '' 's/"name": "phaser-ts-starter"/"name": "my-game"/' package.json
 # Update the HTML title
 sed -i '' 's/<title>Phaser TS Starter/<title>My Game/' index.html
 
+# Update the localStorage save key (src/shared/constants/saveKey.ts)
+sed -i '' 's/phaser-ts-starter:save/my-game:save/' src/shared/constants/saveKey.ts
+
 # If you want a non-MIT license, replace LICENSE now
 ```
 
 ### Step 3 — Install and verify
 
 ```sh
-pnpm install
-pnpm check    # typecheck + lint + format + dep-cruise + test
-pnpm dev      # confirm it boots
+bun install
+bun run check    # typecheck + lint + format + dep-cruise + test
+bun run dev      # confirm it boots
 ```
 
-If `pnpm check` is green, you're good to go. If not, fix the root cause before writing any code — the rails need to work.
+If `bun run check` is green, you're good to go. If not, fix the root cause before writing any code — the rails need to work.
 
 ### Step 3.5 — One-time repo settings (per fork)
 
@@ -130,8 +133,9 @@ Read these files in order — they're the canonical pattern to copy:
 2. [`src/domain/player/Player.test.ts`](./src/domain/player/Player.test.ts) — how to test it
 3. [`src/features/movement/MovementFeature.ts`](./src/features/movement/MovementFeature.ts) — orchestration
 4. [`src/features/movement/MovementFeature.test.ts`](./src/features/movement/MovementFeature.test.ts) — with fake ports
-5. [`src/runtime/phaser/scenes/WorldScene/WorldScene.setup.ts`](./src/runtime/phaser/scenes/WorldScene/WorldScene.setup.ts) — wiring
-6. [`src/app/config/gameConfig.ts`](./src/app/config/gameConfig.ts) — the composition root
+5. [`src/runtime/phaser/scenes/WorldScene/WorldScene.setup.ts`](./src/runtime/phaser/scenes/WorldScene/WorldScene.setup.ts) — scene wiring (no adapter construction)
+6. [`src/app/composition/composeRuntime.ts`](./src/app/composition/composeRuntime.ts) — the composition root (ports + content)
+7. [`src/content/levels/example-level.json`](./src/content/levels/example-level.json) — demo walls, pickups, player start
 
 ### Step 5 — Delete the demo (later)
 
@@ -181,7 +185,7 @@ AI:   (writes plan.md — identifies domain/powerup as a new module, a
 You:  /speckit:tasks
 
 AI:   (writes tasks.md — ~12 tasks, each atomic, starting with
-       "pnpm new:module PowerUp" and ending with "update catalog")
+       "bun run new:module PowerUp" and ending with "update catalog")
 
 You:  /speckit:analyze
 
@@ -193,7 +197,7 @@ You:  Yes.
 ...   (one more clarify loop)
 
 You:  /speckit:implement
-AI:   (works through tasks.md one at a time, running pnpm check after
+AI:   (works through tasks.md one at a time, running bun run check after
        each and asking before taking anything risky)
 ```
 
@@ -204,7 +208,7 @@ AI:   (works through tasks.md one at a time, running pnpm check after
 If `/speckit:plan` wants to put damage math in a Phaser scene, it should refuse and surface the conflict. You then have two choices:
 
 1. **Fix the plan** — move the math to `domain/` where it belongs. Usually right.
-2. **Change the constitution** via ADR — if the rule itself is wrong for your project, use `pnpm new:adr "<Title>"` to propose amending it. Bar is high.
+2. **Change the constitution** via ADR — if the rule itself is wrong for your project, use `bun run new:adr "<Title>"` to propose amending it. Bar is high.
 
 ---
 
@@ -214,14 +218,14 @@ Before hand-writing any of these, run the generator. AI agents especially: using
 
 | You want...                      | Run...                            |
 | -------------------------------- | --------------------------------- |
-| A new domain module              | `pnpm new:module Combat`          |
-| A new Phaser scene               | `pnpm new:scene MenuScene`        |
-| A new feature                    | `pnpm new:feature Respawn`        |
-| A new port + fake for testing    | `pnpm new:port Network`           |
-| A new content type + schema      | `pnpm new:content Enemy`          |
-| A new ADR                        | `pnpm new:adr "Allow ECS"`        |
+| A new domain module              | `bun run new:module Combat`          |
+| A new Phaser scene               | `bun run new:scene MenuScene`        |
+| A new feature                    | `bun run new:feature Respawn`        |
+| A new port + fake for testing    | `bun run new:port Network`           |
+| A new content type + schema      | `bun run new:content Enemy`          |
+| A new ADR                        | `bun run new:adr "Allow ECS"`        |
 
-After adding anything that belongs in the catalog, run `pnpm catalog` to refresh `docs/ai/catalog.md`.
+After adding anything that belongs in the catalog, run `bun run catalog` to refresh `docs/ai/catalog.md`.
 
 ### What the generators DO produce
 
@@ -253,7 +257,7 @@ An ADR (Architecture Decision Record) is a short markdown file in `docs/adr/` th
 - "I added a new domain module following the existing pattern"
 - "I picked blue as the player color"
 
-Run `pnpm new:adr "Allow ECS for combat simulation"` to scaffold one. Set `Status:` to `proposed`, write the Context/Decision/Consequences/Alternatives sections, open a PR. Set `Status:` to `accepted` when the PR merges.
+Run `bun run new:adr "Allow ECS for combat simulation"` to scaffold one. Set `Status:` to `proposed`, write the Context/Decision/Consequences/Alternatives sections, open a PR. Set `Status:` to `accepted` when the PR merges.
 
 ---
 
@@ -290,28 +294,45 @@ Two independent tools enforce this: `eslint-plugin-boundaries` (in your editor a
 Run them:
 
 ```sh
-pnpm test              # unit + integration (fast)
-pnpm test:watch        # TDD mode
-pnpm test:coverage     # with HTML report
-pnpm test:smoke        # Playwright (slower; requires browser install)
+bun run test              # unit + integration (fast)
+bun run test:watch        # TDD mode
+bun run test:coverage     # with HTML report
+bun run test:smoke        # Playwright (slower; requires browser install)
 ```
 
 ---
 
-## 9. The gate — `pnpm check`
+## 9. The gate — `bun run check`
 
 Before claiming a task is done, run:
 
 ```sh
-pnpm check
+bun run check
 ```
 
-It runs: `typecheck → lint → format:check → dep-cruise → test`. If any step fails, fix the root cause. Do not bypass with `--no-verify`. AI agents: this rule applies to you too — if a hook rejects your commit, read the error, fix the underlying issue, and commit again.
+It runs: `typecheck → lint → format:check → knip → catalog --check → dep-cruise → test`. If any step fails, fix the root cause. Do not bypass with `--no-verify`. AI agents: this rule applies to you too — if a hook rejects your commit, read the error, fix the underlying issue, and commit again.
+
+`bun run validate` is `check` plus the Playwright smoke.
 
 Two faster inner loops:
 
-- `pnpm check:arch` — just the boundary checks (lint + dep-cruiser). Good for when you're restructuring imports.
-- `pnpm test:watch` — just the tests, live. Good for TDD.
+- `bun run check:arch` — just the boundary checks (lint + dep-cruiser). Good for when you're restructuring imports.
+- `bun run test:watch` — just the tests, live. Good for TDD.
+
+---
+
+## 9.5 Using tsforge
+
+[tsforge](https://tsforge.dev) is the BoringStack TypeScript build harness. After forking:
+
+```sh
+# from the fork
+tsforge
+```
+
+Point it at this tree. The gate it should run is `bun run check`.
+
+A dedicated Phaser adapter (greenfield clone, planner schema, Phaser conventions instead of React/Elysia) is planned in tsforge and **not shipped**. Until it lands, tsforge treats this repo as generic TypeScript. Do not add `.tsforge/scaffold-manifest.json` here — that file is how tsforge detects the fullstack BoringStack template.
 
 ---
 
@@ -319,12 +340,16 @@ Two faster inner loops:
 
 Every push/PR runs:
 
-1. **`ci.yml`** — typecheck, lint, format, dep-cruise, tests. The same `pnpm check` gate, enforced against every PR.
-2. **`codeql.yml`** — GitHub's static analysis with `security-and-quality` queries.
-3. **`security.yml`** — `pnpm audit` on production deps (high severity fails the PR) plus OpenSSF Scorecard (uploaded as SARIF so you get the GitHub security tab view).
-4. **`arch-invariants.yml`** — grep-based banned-pattern check as belt-and-suspenders on top of lint + dep-cruiser.
-5. **`release-please.yml`** — on `main`, opens/updates a release PR using conventional commits. Merge the PR to cut a release.
-6. **Dependabot** — groups weekly minor/patch updates by package family (phaser, vitest, eslint, playwright, @types/*). Bumps group together so you review one PR instead of twenty.
+1. **`ci.yml`** — `bun run check` plus Playwright smoke.
+2. **`codeql.yml`** — GitHub static analysis with `security-and-quality` queries.
+3. **`security-deps.yml`** — osv-scanner on `bun.lock` + `bun audit --audit-level=high`.
+4. **`security-sast.yml`** — Semgrep (OWASP top ten + JS/TS).
+5. **`security-secrets.yml`** — Gitleaks, pinned binary with SHA256.
+6. **`arch-invariants.yml`** — grep-based banned-pattern check as belt-and-suspenders on top of lint + dep-cruiser.
+7. **`release-please.yml`** — on `main`, opens/updates a release PR using conventional commits.
+8. **Dependabot** — weekly bun + GitHub Actions groups.
+
+On `main`, **`security-scorecard.yml`** publishes OpenSSF Scorecard SARIF.
 
 ### Conventional commit prefixes release-please cares about
 
@@ -345,10 +370,10 @@ Breaking change? Include `!` after the type (`feat!:`) or a `BREAKING CHANGE:` f
 If you're an AI reading this mid-session, save yourself tokens:
 
 1. **Read `docs/ai/catalog.md` before searching the codebase.** It's auto-generated; it tells you exactly what exists and where.
-2. **Check for a generator before writing boilerplate.** `pnpm new:module` beats re-deriving eight files every time.
+2. **Check for a generator before writing boilerplate.** `bun run new:module` beats re-deriving eight files every time.
 3. **Use the golden-rule table** ([`docs/ai/architecture.md`](./docs/ai/architecture.md)) to answer "where does X go?" without re-exploring.
-4. **Don't re-lint.** `pnpm check:arch` is faster than the full gate when you only changed imports.
-5. **Run `pnpm catalog` after adding anything** so future sessions can find it without searching.
+4. **Don't re-lint.** `bun run check:arch` is faster than the full gate when you only changed imports.
+5. **Run `bun run catalog` after adding anything** so future sessions can find it without searching.
 6. **Use `/speckit:specify`, `/speckit:plan`, `/speckit:tasks` in order.** Each produces a persistent artifact that survives the session — you never re-derive them.
 7. **Mimic the demo slice** for the first few features. It's the pattern you're expected to produce.
 
@@ -366,7 +391,7 @@ Inject `ITimePort` instead. Look at [`src/features/save-game/SaveGameFeature.ts`
 Delete the stub lines, keep the file structure. The structure is the whole point.
 
 **"I forgot what exists."**
-`pnpm catalog` and open `docs/ai/catalog.md`. If the catalog is stale, regenerate.
+`bun run catalog` and open `docs/ai/catalog.md`. If the catalog is stale, regenerate.
 
 **"Phaser 4 doesn't have a default export."**
 Correct — all runtime files use `import * as Phaser from 'phaser'`. Copy that pattern.
@@ -398,9 +423,9 @@ Split it. `max-lines` is a 400-line soft limit for a reason.
 
 ## 14. TL;DR
 
-1. Fork via "Use this template", rename, `pnpm install && pnpm check && pnpm dev`.
+1. Fork via "Use this template", rename, `bun install && bun run check && bun run dev`.
 2. For each feature: `/speckit:specify → :clarify → :plan → :tasks → :analyze → :implement`.
-3. Use `pnpm new:*` generators for all boilerplate.
-4. `pnpm check` must be green before claiming done.
+3. Use `bun run new:*` generators for all boilerplate.
+4. `bun run check` must be green before claiming done.
 5. Architecture rules are enforced by three independent tools. Trust the errors; don't work around them.
 6. Write ADRs for deviations. Don't silently break rules.

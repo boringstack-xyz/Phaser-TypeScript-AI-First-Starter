@@ -4,5 +4,5 @@ contact_links:
     url: https://github.com/github/spec-kit
     about: For substantive features, open a spec with `/speckit:specify` in your local fork first. The resulting `docs/specs/` artifacts become the PR description.
   - name: Security vulnerabilities
-    url: https://github.com/agjs/Phaser-TypeScript-AI-First-Starter/security/advisories/new
+    url: https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/security/advisories/new
     about: Do not file public issues for security vulnerabilities. Use GitHub's private vulnerability reporting (Security tab on this repo).

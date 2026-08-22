@@ -6,6 +6,7 @@ import type { IEventBus } from '@shared/events';
 export interface IMovementFeatureDeps {
   readonly events: IEventBus<GameEventMap>;
   readonly bounds: Bounds;
+  readonly speedPxPerSec: number;
 }
 
 export interface IMovementFeature {
@@ -14,7 +15,7 @@ export interface IMovementFeature {
 
 export const createMovementFeature = (deps: IMovementFeatureDeps): IMovementFeature => ({
   tick(state, intent, deltaMs) {
-    const moved = applyMoveIntent(state.player, intent, deltaMs);
+    const moved = applyMoveIntent(state.player, intent, deltaMs, deps.speedPxPerSec);
     const clamped = {
       ...moved,
       position: clampToBounds(moved.position, deps.bounds),

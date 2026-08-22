@@ -5,6 +5,7 @@ import type { IEventBus } from '@shared/events';
 
 export interface IInteractionFeatureDeps {
   readonly events: IEventBus<GameEventMap>;
+  readonly pointsPerInteraction: number;
 }
 
 export interface IInteractionFeature {
@@ -23,7 +24,7 @@ export const createInteractionFeature = (deps: IInteractionFeatureDeps): IIntera
       }
 
       deps.events.emit('interaction.completed', event);
-      progression = recordInteraction(progression, event);
+      progression = recordInteraction(progression, event, deps.pointsPerInteraction);
       anyConsumed = true;
 
       return markConsumed(i);

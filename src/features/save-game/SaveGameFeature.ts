@@ -1,10 +1,13 @@
 import type { GameEventMap, GameState } from '@domain/core';
+import { SAVE_GAME_KEY } from '@shared/constants';
 import type { IEventBus } from '@shared/events';
+import { err, ok, type Result } from '@shared/types';
 import type { ISaveGamePort } from '@shared/types';
 
 import type { ISaveGamePayload } from './SaveGame.contracts.js';
+import { SaveGamePayloadSchema } from './SaveGame.schema.js';
 
-const SAVE_KEY = 'phaser-ts-starter:save';
+export type SaveLoadError = 'missing' | 'corrupt';
 
 export interface ISaveGameFeatureDeps {
   readonly events: IEventBus<GameEventMap>;
@@ -14,7 +17,7 @@ export interface ISaveGameFeatureDeps {
 
 export interface ISaveGameFeature {
   dispose: () => void;
-  load: () => Promise<ISaveGamePayload | null>;
+  load: () => Promise<Result<ISaveGamePayload, SaveLoadError>>;
 }
 
 export const createSaveGameFeature = (deps: ISaveGameFeatureDeps): ISaveGameFeature => {
@@ -27,7 +30,7 @@ export const createSaveGameFeature = (deps: ISaveGameFeatureDeps): ISaveGameFeat
     };
 
     void deps.port
-      .save(SAVE_KEY, JSON.stringify(payload))
+      .save(SAVE_GAME_KEY, JSON.stringify(payload))
       .then(() => {
         deps.events.emit('saveGame.completed', { ok: true });
       })
@@ -39,18 +42,23 @@ export const createSaveGameFeature = (deps: ISaveGameFeatureDeps): ISaveGameFeat
   return {
     dispose: unsub,
     async load() {
-      const raw = await deps.port.load(SAVE_KEY);
-      if (!raw) {
-        return null;
+      const raw = await deps.port.load(SAVE_GAME_KEY);
+      if (raw === null) {
+        return err('missing');
       }
 
       try {
-        const parsed = JSON.parse(raw) as ISaveGamePayload;
-        deps.events.emit('saveGame.loaded', { score: parsed.score });
+        const parsed: unknown = JSON.parse(raw);
+        const payload = SaveGamePayloadSchema.safeParse(parsed);
+        if (!payload.success) {
+          return err('corrupt');
+        }
 
-        return parsed;
+        deps.events.emit('saveGame.loaded', { score: payload.data.score });
+
+        return ok(payload.data);
       } catch {
-        return null;
+        return err('corrupt');
       }
     },
   };

@@ -52,5 +52,5 @@ for (const [path, body] of Object.entries(files)) {
   writeFileSafe(path, body);
 }
 console.log(
-  `\nDone. Next:\n  • Register exports in ${base}/index.ts as you add them\n  • Add the module to docs/ai/catalog.md (or run pnpm catalog)`,
+  `\nDone. Next:\n  • Register exports in ${base}/index.ts as you add them\n  • Add the module to docs/ai/catalog.md (or run bun run catalog)`,
 );

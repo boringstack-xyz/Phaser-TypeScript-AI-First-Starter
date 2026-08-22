@@ -8,7 +8,10 @@
  * Runs against fake ports — no Phaser, no jsdom-specific APIs.
  */
 
-import { createGameState, type GameEventMap, type GameState } from '@domain/core';
+import type { GameEventMap, GameState } from '@domain/core';
+import { testGameState } from '@domain/core/testGameState.js';
+import { PLAYER_SPEED_PX_PER_SEC } from '@domain/player';
+import { POINTS_PER_INTERACTION } from '@domain/progression';
 import { createHudFeature, type IHudRenderer } from '@features/hud';
 import { createInteractionFeature } from '@features/interaction';
 import { createMovementFeature } from '@features/movement';
@@ -35,8 +38,15 @@ const tick = (
   deltaMs: number,
   events: ReturnType<typeof createEventBus<GameEventMap>>,
 ): GameState => {
-  const movement = createMovementFeature({ events, bounds });
-  const interaction = createInteractionFeature({ events });
+  const movement = createMovementFeature({
+    events,
+    bounds,
+    speedPxPerSec: PLAYER_SPEED_PX_PER_SEC,
+  });
+  const interaction = createInteractionFeature({
+    events,
+    pointsPerInteraction: POINTS_PER_INTERACTION,
+  });
   return interaction.tick(movement.tick(state, intent, deltaMs));
 };
 
@@ -44,23 +54,26 @@ describe('save-game roundtrip', () => {
   it('persists score across a save/load cycle', async () => {
     const port = createFakeSaveGamePort();
 
-    // --- session 1: play, save ---
     {
       const events = createEventBus<GameEventMap>();
       const hud = fakeHud();
       createHudFeature({ events, renderer: hud });
 
-      let state = createGameState();
+      let state = testGameState();
       const save = createSaveGameFeature({
         events,
         port,
         getState: () => state,
       });
 
-      // Move the player onto the first interactable's position to trigger overlap.
+      const first = state.interactables[0];
+      if (!first) {
+        throw new Error('testGameState must include at least one interactable');
+      }
+
       state = {
         ...state,
-        player: { ...state.player, position: state.interactables[0]!.position },
+        player: { ...state.player, position: first.position },
       };
       state = tick(state, { dx: 0, dy: 0 }, 16, events);
 
@@ -76,7 +89,6 @@ describe('save-game roundtrip', () => {
       save.dispose();
     }
 
-    // --- session 2: load, verify HUD reflects saved score ---
     {
       const events = createEventBus<GameEventMap>();
       const hud = fakeHud();
@@ -84,11 +96,14 @@ describe('save-game roundtrip', () => {
       const save = createSaveGameFeature({
         events,
         port,
-        getState: () => createGameState(),
+        getState: () => testGameState(),
       });
 
       const loaded = await save.load();
-      expect(loaded?.score).toBe(1);
+      expect(loaded.ok).toBe(true);
+      if (loaded.ok) {
+        expect(loaded.value.score).toBe(1);
+      }
       expect(hud.last()).toBe(1);
     }
   });

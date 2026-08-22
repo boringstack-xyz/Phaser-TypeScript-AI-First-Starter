@@ -2,7 +2,7 @@
 description: Run architectural boundary checks (eslint boundaries + dep-cruiser)
 ---
 
-Run `pnpm check:arch`. Report:
+Run `bun run check:arch`. Report:
 
 1. Boundary violations (if any), from both tools.
 2. Orphan modules (if any) from dep-cruiser.

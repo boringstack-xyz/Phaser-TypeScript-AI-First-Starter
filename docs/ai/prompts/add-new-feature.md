@@ -8,8 +8,8 @@ Add a new feature `<Name>` that does `<what the feature does>`.
 
 **Do this in exactly this order:**
 
-1. Ensure the relevant domain module(s) exist. If not, run `pnpm new:module <Name>` first.
-2. Run `pnpm new:feature <Name>`.
+1. Ensure the relevant domain module(s) exist. If not, run `bun run new:module <Name>` first.
+2. Run `bun run new:feature <Name>`.
 3. Edit `src/features/<name>/<Name>Feature.ts`:
    - Declare deps in `I<Name>FeatureDeps` (always includes `events: IEventBus<GameEventMap>`).
    - Implement the feature as `create<Name>Feature(deps) → I<Name>Feature`.
@@ -17,9 +17,9 @@ Add a new feature `<Name>` that does `<what the feature does>`.
 4. Add events to `src/domain/core/events.ts` if you emit new event types.
 5. Add a test in `<Name>Feature.test.ts` using fake ports from `@shared/testing`.
 6. Wire the feature into `src/runtime/phaser/scenes/<Scene>/<Scene>.setup.ts`.
-7. Run `pnpm catalog`, then `pnpm check`.
+7. Run `bun run catalog`, then `bun run check`.
 
 **Rules:**
-- Features import from domain + runtime + content + shared. No `phaser` imports directly.
+- Features import from domain + content + shared. No `phaser` imports, no `src/runtime/**` imports.
 - Feature tests must not require a real Phaser instance.
 - If the feature needs a new side effect, add a port to `shared/types/ports.ts` and implement it in `runtime/adapters/`.

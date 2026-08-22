@@ -127,7 +127,7 @@ For a 20-minute feature, skip the pipeline. For a 2-day feature, always run it. 
 ### Build for itch (from this template)
 
 ```sh
-pnpm build
+bun run build
 cd dist
 zip -r ../my-game.zip .
 cd ..

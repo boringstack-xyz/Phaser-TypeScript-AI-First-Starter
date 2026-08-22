@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         Thanks for taking the time to file a bug. Before submitting, please
-        confirm `pnpm check` is green on a fresh clone — if not, that's the bug.
+        confirm `bun run check` is green on a fresh clone — if not, that's the bug.
 
   - type: textarea
     id: what-happened
@@ -23,7 +23,7 @@ body:
       description: Minimal steps. Include exact commands and file paths.
       placeholder: |
         1. Clone the template into a fresh directory
-        2. Run `pnpm install && pnpm check`
+        2. Run `bun install && bun run check`
         3. ...
     validations:
       required: true
@@ -45,18 +45,18 @@ body:
       required: true
 
   - type: input
-    id: node-version
+    id: bun-version
     attributes:
-      label: Node version
-      placeholder: '22.22.0'
+      label: Bun version
+      placeholder: '1.3.14'
     validations:
       required: true
 
   - type: input
-    id: pnpm-version
+    id: node-version
     attributes:
-      label: pnpm version
-      placeholder: '10.30.3'
+      label: Node version
+      placeholder: '24.0.0'
     validations:
       required: true
 

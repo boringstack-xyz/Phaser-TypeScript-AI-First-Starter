@@ -1,4 +1,6 @@
-import { interactableId } from './ids.js';
+import type { Vec2 } from '@shared/types';
+
+import { interactableId, playerId } from './ids.js';
 import { createGrid, setTile, type GridState, type TileCoord } from '../grid/index.js';
 import { createInteractable } from '../interaction/Interaction.model.js';
 import type { InteractableState } from '../interaction/Interaction.types.js';
@@ -14,34 +16,44 @@ export interface GameState {
   readonly grid: GridState;
 }
 
-const DEMO_WALLS: readonly { readonly coord: TileCoord; readonly id: string }[] = [
-  { coord: { col: 8, row: 6 }, id: 'brick' },
-  { coord: { col: 9, row: 6 }, id: 'brick' },
-  { coord: { col: 10, row: 6 }, id: 'brick' },
-  { coord: { col: 11, row: 6 }, id: 'brick' },
-  { coord: { col: 15, row: 3 }, id: 'steel' },
-  { coord: { col: 15, row: 4 }, id: 'steel' },
-  { coord: { col: 20, row: 8 }, id: 'brick' },
-  { coord: { col: 21, row: 8 }, id: 'brick' },
-  { coord: { col: 22, row: 8 }, id: 'brick' },
-];
+export interface WallPlacement {
+  readonly col: number;
+  readonly row: number;
+  readonly tileType: string;
+}
 
-export const createGameState = (): GameState => {
+export interface InteractablePlacement {
+  readonly id: string;
+  readonly x: number;
+  readonly y: number;
+}
+
+export interface CreateGameStateInput {
+  readonly cols: number;
+  readonly rows: number;
+  readonly tileSize: number;
+  readonly playerStart: Vec2;
+  readonly walls: readonly WallPlacement[];
+  readonly interactables: readonly InteractablePlacement[];
+}
+
+export const createGameState = (input: CreateGameStateInput): GameState => {
   const gridBase = createGrid({
-    cols: 30,
-    rows: 17,
-    tileSize: 32,
+    cols: input.cols,
+    rows: input.rows,
+    tileSize: input.tileSize,
     origin: { x: 0, y: 0 },
   });
-  const grid = DEMO_WALLS.reduce((g, w) => setTile(g, w.coord, w.id), gridBase);
+  const grid = input.walls.reduce(
+    (g, w) => setTile(g, { col: w.col, row: w.row } satisfies TileCoord, w.tileType),
+    gridBase,
+  );
 
   return {
-    player: createPlayer(),
-    interactables: [
-      createInteractable(interactableId('i1'), 200, 100),
-      createInteractable(interactableId('i2'), 600, 420),
-      createInteractable(interactableId('i3'), 120, 400),
-    ],
+    player: createPlayer(playerId('p1'), input.playerStart),
+    interactables: input.interactables.map((i) =>
+      createInteractable(interactableId(i.id), i.x, i.y),
+    ),
     progression: createProgression(),
     grid,
   };

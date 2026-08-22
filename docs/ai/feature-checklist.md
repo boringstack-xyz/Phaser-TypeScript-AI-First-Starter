@@ -4,22 +4,22 @@ Adding a new gameplay feature? Walk this list.
 
 ## Domain
 
-- [ ] Domain module exists for the concept (or create with `pnpm new:module`)
+- [ ] Domain module exists for the concept (or create with `bun run new:module`)
 - [ ] Pure behavior(s) written in `*.behavior.ts`
 - [ ] Unit tests in `*.test.ts` cover happy path, boundary cases, and idempotence
 - [ ] New types exported from the module's `index.ts`
 
 ## Feature
 
-- [ ] Feature created with `pnpm new:feature <Name>`
+- [ ] Feature created with `bun run new:feature <Name>`
 - [ ] `create<Name>Feature(deps)` takes only port interfaces and the event bus — no concrete engine objects
 - [ ] Emits domain events (`events.emit(...)`) for observable outcomes
 - [ ] Feature test uses fake ports from `@shared/testing`
 
 ## Runtime
 
-- [ ] If new adapters are needed, implement them in `src/runtime/adapters/` or `src/runtime/phaser/`
-- [ ] Scene wires the feature in `<Scene>.setup.ts`
+- [ ] If new adapters are needed, implement them in `src/runtime/adapters/` or `src/runtime/phaser/` and construct them in `src/app/composition/`
+- [ ] Scene wires the feature in `<Scene>.setup.ts` (do not construct browser ports there)
 - [ ] `dispose()` is wired to scene `SHUTDOWN`
 
 ## Content
@@ -30,9 +30,9 @@ Adding a new gameplay feature? Walk this list.
 
 ## Docs + catalog
 
-- [ ] `pnpm catalog` runs clean and the new module/feature appears in `docs/ai/catalog.md`
-- [ ] If you invented a new architectural pattern, write an ADR (`pnpm new:adr`)
+- [ ] `bun run catalog` runs clean and the new module/feature appears in `docs/ai/catalog.md`
+- [ ] If you invented a new architectural pattern, write an ADR (`bun run new:adr`)
 
 ## Gate
 
-- [ ] `pnpm check` passes (typecheck + lint + format + dep-cruise + test)
+- [ ] `bun run check` passes (typecheck + lint + format + knip + catalog --check + dep-cruise + test)

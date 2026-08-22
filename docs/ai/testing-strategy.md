@@ -39,8 +39,8 @@ Playwright. Small, fast, deterministic.
 ## Running
 
 ```sh
-pnpm test              # run once
-pnpm test:watch        # watch mode
-pnpm test:coverage     # with coverage report
-pnpm test:smoke        # Playwright smoke tests
+bun run test              # run once
+bun run test:watch        # watch mode
+bun run test:coverage     # with coverage report
+bun run test:smoke        # Playwright smoke tests
 ```

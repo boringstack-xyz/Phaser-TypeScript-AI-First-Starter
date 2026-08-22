@@ -13,13 +13,24 @@ const ARCH_ELEMENTS = [
   { type: 'app', pattern: 'src/app/**' },
 ];
 
-const ARCH_RULES = [
-  { from: 'domain', allow: ['domain', 'shared'] },
-  { from: 'content', allow: ['content', 'shared'] },
-  { from: 'shared', allow: ['shared'] },
-  { from: 'runtime', allow: ['runtime', 'domain', 'shared', 'features', 'content'] },
-  { from: 'features', allow: ['features', 'domain', 'runtime', 'content', 'shared'] },
-  { from: 'app', allow: ['app', 'features', 'runtime', 'domain', 'content', 'shared'] },
+/** @param {string} type */
+const element = (type) => ({ element: { type } });
+/** @param {string[]} types */
+const allowTo = (...types) => types.map((type) => ({ to: element(type) }));
+
+const ARCH_POLICIES = [
+  { from: element('domain'), allow: allowTo('domain', 'shared') },
+  { from: element('content'), allow: allowTo('content', 'shared') },
+  { from: element('shared'), allow: allowTo('shared') },
+  {
+    from: element('runtime'),
+    allow: allowTo('runtime', 'domain', 'features', 'content', 'shared'),
+  },
+  { from: element('features'), allow: allowTo('features', 'domain', 'content', 'shared') },
+  {
+    from: element('app'),
+    allow: allowTo('app', 'features', 'runtime', 'domain', 'content', 'shared'),
+  },
 ];
 
 export default tseslint.config(
@@ -58,13 +69,14 @@ export default tseslint.config(
     settings: {
       'boundaries/elements': ARCH_ELEMENTS,
       'boundaries/include': ['src/**/*'],
+      'boundaries/legacy-warnings': false,
       'import/resolver': {
         typescript: { project: ['./tsconfig.json', './tsconfig.node.json'] },
       },
     },
     rules: {
-      'boundaries/element-types': ['error', { default: 'disallow', rules: ARCH_RULES }],
-      'boundaries/no-unknown': 'error',
+      'boundaries/dependencies': ['error', { default: 'disallow', policies: ARCH_POLICIES }],
+      'boundaries/no-unknown-dependencies': 'error',
       'boundaries/no-unknown-files': 'off',
 
       'no-restricted-imports': [
@@ -196,8 +208,8 @@ export default tseslint.config(
     files: ['scripts/**/*.ts'],
     rules: {
       'no-console': 'off',
-      'boundaries/element-types': 'off',
-      'boundaries/no-unknown': 'off',
+      'boundaries/dependencies': 'off',
+      'boundaries/no-unknown-dependencies': 'off',
     },
   },
 );

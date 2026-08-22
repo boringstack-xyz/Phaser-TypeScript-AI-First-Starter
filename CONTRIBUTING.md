@@ -6,15 +6,17 @@ Thanks for considering a contribution. This template is intentionally opinionate
 
 ## Local setup
 
-Requirements: Node `>=22.22.0`, pnpm `>=10.30.0`. A [`.nvmrc`](./.nvmrc) pins the exact Node version if you use `nvm`/`fnm`.
+Requirements: Bun `1.3.14` (`packageManager` in `package.json`). Node `>=24` if a tool shells out to Node. A [`.nvmrc`](./.nvmrc) pins Node 24.
 
 ```sh
-pnpm install
-pnpm check       # the gate
-pnpm dev         # http://localhost:5173
+bun install
+bun run check       # the gate
+bun run dev         # http://localhost:5173
 ```
 
-If `pnpm check` isn't green on a fresh clone, that's a bug — please file an issue before changing code.
+If `bun run check` isn't green on a fresh clone, that's a bug — please file an issue before changing code.
+
+`bun run validate` is the full bar (`check` + Playwright smoke). Desired GitHub repository settings for this template live in [`.github/desired-repo-settings.json`](./.github/desired-repo-settings.json).
 
 ## Proposing a change
 
@@ -41,11 +43,11 @@ These are non-negotiable and enforced by lint + dep-cruiser + CI:
 2. **No `Math.random`, `Date.now`, `new Date()`, `localStorage`, `window`, `document`, `fetch` in `src/domain/**`.** Inject a port instead.
 3. **Content is schema-validated at import time.** Broken JSON fails the build.
 4. **Named exports only** outside a handful of entry points.
-5. **`pnpm check` must pass** before a change is considered done.
+5. **`bun run check` must pass** before a change is considered done.
 
 Full rules: [`docs/ai/contribution-contract.md`](./docs/ai/contribution-contract.md). Constitution (spec-kit): [`.specify/memory/constitution.md`](./.specify/memory/constitution.md).
 
-If you need to break a rule, write an ADR first: `pnpm new:adr "<Title>"`.
+If you need to break a rule, write an ADR first: `bun run new:adr "<Title>"`.
 
 ## Generators
 
@@ -53,15 +55,15 @@ Before hand-writing anything, check if a generator exists:
 
 | Change                       | Command                       |
 | ---------------------------- | ----------------------------- |
-| New domain module            | `pnpm new:module <Name>`      |
-| New Phaser scene             | `pnpm new:scene <Name>`       |
-| New feature                  | `pnpm new:feature <Name>`     |
-| New port + fake              | `pnpm new:port <Name>`        |
-| New content schema + sample  | `pnpm new:content <Name>`     |
-| New ADR                      | `pnpm new:adr "<Title>"`      |
-| Refresh codebase catalog     | `pnpm catalog`                |
+| New domain module            | `bun run new:module <Name>`      |
+| New Phaser scene             | `bun run new:scene <Name>`       |
+| New feature                  | `bun run new:feature <Name>`     |
+| New port + fake              | `bun run new:port <Name>`        |
+| New content schema + sample  | `bun run new:content <Name>`     |
+| New ADR                      | `bun run new:adr "<Title>"`      |
+| Refresh codebase catalog     | `bun run catalog`                |
 
-After adding/removing modules, scenes, features, ports, or content types, run `pnpm catalog` so `docs/ai/catalog.md` stays accurate.
+After adding/removing modules, scenes, features, ports, or content types, run `bun run catalog` so `docs/ai/catalog.md` stays accurate.
 
 ## Commit messages
 
@@ -82,13 +84,13 @@ Breaking change: include `!` after the type (`feat!:`) or add a `BREAKING CHANGE
 Before requesting review:
 
 - [ ] If non-trivial, `docs/specs/<NNN>/` exists with spec, plan, and tasks
-- [ ] `pnpm check` passes locally
+- [ ] `bun run check` passes locally (`bun run validate` if the change can affect boot)
 - [ ] Tests added/updated for changed domain behaviors
-- [ ] `pnpm catalog` regenerated if modules/features/scenes/ports/content changed
+- [ ] `bun run catalog` regenerated if modules/features/scenes/ports/content changed
 - [ ] ADR added under `docs/adr/` if you deviated from an architectural rule
 - [ ] Commit message follows Conventional Commits
 
-CI re-runs `pnpm check` plus CodeQL, OpenSSF Scorecard, `pnpm audit`, and `arch-invariants` on every PR.
+CI re-runs `bun run check` plus Playwright smoke, CodeQL, Semgrep, OSV + `bun audit`, Gitleaks, and `arch-invariants` on every PR. Audit repo settings with `./scripts/audit-repo-settings.sh`.
 
 ## License
 

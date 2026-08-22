@@ -6,7 +6,7 @@ import { toKebabCase, writeFileSafe } from './_lib.js';
 
 const title = process.argv.slice(2).join(' ').trim();
 if (!title) {
-  console.error('usage: pnpm new:adr "<Title>"');
+  console.error('usage: bun run new:adr "<Title>"');
   process.exit(1);
 }
 

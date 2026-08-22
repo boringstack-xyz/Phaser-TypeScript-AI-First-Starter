@@ -2,6 +2,23 @@
   "id": "example-level",
   "displayName": "Example Level",
   "width": 960,
-  "height": 540,
-  "playerStart": { "x": 100, "y": 100 }
+  "height": 544,
+  "tileSize": 32,
+  "playerStart": { "x": 100, "y": 100 },
+  "walls": [
+    { "col": 8, "row": 6, "tileType": "brick" },
+    { "col": 9, "row": 6, "tileType": "brick" },
+    { "col": 10, "row": 6, "tileType": "brick" },
+    { "col": 11, "row": 6, "tileType": "brick" },
+    { "col": 15, "row": 3, "tileType": "steel" },
+    { "col": 15, "row": 4, "tileType": "steel" },
+    { "col": 20, "row": 8, "tileType": "brick" },
+    { "col": 21, "row": 8, "tileType": "brick" },
+    { "col": 22, "row": 8, "tileType": "brick" }
+  ],
+  "interactables": [
+    { "id": "i1", "x": 200, "y": 100 },
+    { "id": "i2", "x": 600, "y": 420 },
+    { "id": "i3", "x": 120, "y": 400 }
+  ]
 }

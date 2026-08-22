@@ -3,7 +3,7 @@
 **Do not hand-write new domain modules. Run:**
 
 ```sh
-pnpm new:module <Name>
+bun run new:module <Name>
 ```
 
 …which scaffolds the 8-file layout below.
