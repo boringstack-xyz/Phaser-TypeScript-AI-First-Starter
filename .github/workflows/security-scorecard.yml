@@ -35,9 +35,9 @@ jobs:
           path: scorecard-results.sarif
           retention-days: 5
       # Full Scorecard still publishes to scorecard.dev. These checks cannot
-      # reach 10 on a one-maintainer template (second human reviewer, CII badge
-      # signup, historical CI/SAST coverage, fuzzing). Strip them from the
-      # GitHub code-scanning upload so weekly runs do not reopen accepted risk.
+      # reach 10 on a one-maintainer org (no second reviewer, CII badge signup,
+      # historical CI/SAST coverage, fuzzing). Strip them from the GitHub
+      # code-scanning upload so weekly runs do not reopen accepted risk.
       - name: Filter residual Scorecard rules from code scanning
         run: |
           jq '
@@ -45,7 +45,7 @@ jobs:
               .results |= map(
                 select(
                   .ruleId as $id
-                  | ["CodeReviewID", "CIIBestPracticesID", "SASTID", "CITestsID", "FuzzingID"]
+                  | ["CodeReviewID", "CIIBestPracticesID", "SASTID", "CITestsID", "FuzzingID", "BranchProtectionID"]
                     | index($id)
                     | not
                 )
