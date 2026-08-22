@@ -52,6 +52,10 @@ Violations are lint errors (eslint-plugin-boundaries) and dep-cruiser errors in 
 - **Domain is pure.** No `Math.random`, no `Date.now`, no `window`, no `localStorage` — inject via ports.
 - **Content is schema-validated at import time.** A malformed JSON file breaks the build.
 - **Named exports only** (default exports allowed only in `main.ts` and config files).
+- **Scene keys are branded constants** (`asSceneKey` in `src/runtime/phaser/scenes/sceneKeys.ts`), never string literals in `scene.start` / `super()`.
+- **Scenes hook `Phaser.Scenes.Events.SHUTDOWN`** and dispose run-lifetime resources there. Do not set `ignoreDestroy`. Do not construct GameObjects in `update()`.
+
+tsforge's `phaser` pack enforces the engine-API subset of these rules when pointed at a fork.
 
 ## When the rules feel wrong
 

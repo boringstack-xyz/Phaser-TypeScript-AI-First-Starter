@@ -330,9 +330,9 @@ Two faster inner loops:
 tsforge
 ```
 
-Point it at this tree. The gate it should run is `bun run check`.
+Point it at this tree. The gate it should run is `bun run check`. The **`phaser` rule pack** auto-applies from the `phaser` dependency (scene shutdown, no factories in `update`, branded keys). This template's ESLint already covers a syntactic subset of that pack.
 
-A dedicated Phaser adapter (greenfield clone, planner schema, Phaser conventions instead of React/Elysia) is planned in tsforge and **not shipped**. Until it lands, tsforge treats this repo as generic TypeScript. Do not add `.tsforge/scaffold-manifest.json` here — that file is how tsforge detects the fullstack BoringStack template.
+A dedicated Phaser **adapter** (greenfield clone, planner schema, Phaser conventions instead of React/Elysia) is planned in tsforge and **not shipped**. Do not add `.tsforge/scaffold-manifest.json` here — that file is how tsforge detects the fullstack BoringStack template.
 
 ---
 

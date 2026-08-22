@@ -47,7 +47,9 @@ Must pass. Fix root causes; do not skip hooks.
 
 [tsforge](https://tsforge.dev) is the org TypeScript harness. Point it at a fork of this repo; the gate is `bun run check`.
 
-A Phaser stack adapter (planner schema, conventions, greenfield clone, **Phaser rule pack**) is **planned in tsforge, not shipped**. That pack is what will make this template as enforcement-first as BoringStack: gate + rule-docs, not prose. Until it exists, treat this tree as generic TypeScript and trust `bun run check`. Do **not** add `.tsforge/scaffold-manifest.json` — that file is how tsforge detects the fullstack BoringStack template.
+The **`phaser` rule pack** auto-applies when `phaser` is in package.json: scene SHUTDOWN ownership, no global emitter leaks, no Phaser factories in `update`/`tick`, branded scene/texture keys, no `ignoreDestroy`. This repo's `eslint.config.js` covers a syntactic subset of that pack so `bun run check` stays honest without depending on unpublished tsforge.
+
+A Phaser **stack adapter** (planner schema, conventions, greenfield clone) is still planned, not shipped. Do **not** add `.tsforge/scaffold-manifest.json` — that file is how tsforge detects the fullstack BoringStack template.
 
 ## Deviations
 

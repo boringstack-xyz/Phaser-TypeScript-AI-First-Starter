@@ -169,10 +169,38 @@ export default tseslint.config(
   },
 
   // Runtime and app: allowed to import phaser.
+  // Syntactic subset of the tsforge `phaser` pack. The full pack applies when
+  // tsforge runs against this tree (detected from the `phaser` dependency).
   {
     files: ['src/runtime/**/*.ts', 'src/app/**/*.ts'],
     rules: {
       'no-restricted-imports': 'off',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "AssignmentExpression[left.property.name='ignoreDestroy'][right.value=true]",
+          message:
+            'Do not set ignoreDestroy. Keep cross-scene objects in a game-lifetime service, or pool them. (tsforge/no-ignore-destroy)',
+        },
+        {
+          selector:
+            "CallExpression[callee.object.property.name='scene'][callee.property.name=/^(start|launch|stop|pause|resume|sleep|wake|switch|run|remove)$/][arguments.0.type='Literal']",
+          message:
+            'Pass a named scene-key constant, not a string literal. (tsforge/no-raw-scene-key-literal)',
+        },
+        {
+          selector:
+            "CallExpression[callee.object.name='window'][callee.property.name='addEventListener']",
+          message:
+            'Do not attach window listeners from a Scene; bind game-lifetime listeners in app bootstrap. (tsforge/no-unmanaged-global-listeners)',
+        },
+        {
+          selector:
+            'CallExpression[callee.name=/^(setInterval|setTimeout|requestAnimationFrame)$/]',
+          message:
+            'Do not use raw timers in Phaser runtime; scene.time is shutdown-owned. (tsforge/no-unmanaged-global-listeners)',
+        },
+      ],
     },
   },
 

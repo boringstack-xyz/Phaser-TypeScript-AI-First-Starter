@@ -47,6 +47,12 @@ jobs:
             echo "::error::Storage access found in src/domain/ — use ISaveGamePort."
             exit 1
           fi
+      - name: no ignoreDestroy in runtime/
+        run: |
+          if grep -rnE "ignoreDestroy[[:space:]]*=[[:space:]]*true" src/runtime src/app 2>/dev/null; then
+            echo "::error::ignoreDestroy = true found — Scene/Group destroy will skip the object. (tsforge/no-ignore-destroy)"
+            exit 1
+          fi
       - name: no runtime imports in domain/
         run: |
           if grep -rnE "from ['\"]@runtime|from ['\"]\.+/runtime" src/domain 2>/dev/null; then

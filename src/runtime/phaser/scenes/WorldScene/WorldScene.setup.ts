@@ -79,8 +79,10 @@ export const setupWorldScene = async (ctx: SetupContext): Promise<IWorldSceneRun
 
   const keyboard = ctx.scene.input.keyboard;
   // Keyboard is optional (touch-only / headless). Movement already no-ops via the input port.
-  keyboard?.addKey('S').on('down', () => events.emit('saveGame.requested', {}));
-  keyboard?.addKey('R').on('down', () => {
+  const saveKey = keyboard?.addKey('S');
+  const resetKey = keyboard?.addKey('R');
+  saveKey?.on('down', () => events.emit('saveGame.requested', {}));
+  resetKey?.on('down', () => {
     state = ctx.deps.createState();
     playerEntity.render(state.player);
     wallLayer.redraw(state.grid);
@@ -124,6 +126,8 @@ export const setupWorldScene = async (ctx: SetupContext): Promise<IWorldSceneRun
       hud.dispose();
       save.dispose();
       input.destroy();
+      keyboard?.removeKey('S');
+      keyboard?.removeKey('R');
       events.clear();
       wallLayer.destroy();
       playerEntity.destroy();
