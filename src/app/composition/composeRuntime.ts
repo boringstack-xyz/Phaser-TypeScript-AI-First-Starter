@@ -34,9 +34,19 @@ export const composePorts = (): IComposedPorts => ({
   save: createLocalStorageSavePort(),
 });
 
+const gridExtent = (span: number, tileSize: number, axis: 'width' | 'height'): number => {
+  if (tileSize <= 0 || span % tileSize !== 0) {
+    throw new Error(
+      `Level ${axis} (${span}) must be divisible by tileSize (${tileSize}); got remainder ${span % tileSize}.`,
+    );
+  }
+
+  return span / tileSize;
+};
+
 export const levelToGameStateInput = (level: Level): CreateGameStateInput => ({
-  cols: Math.floor(level.width / level.tileSize),
-  rows: Math.floor(level.height / level.tileSize),
+  cols: gridExtent(level.width, level.tileSize, 'width'),
+  rows: gridExtent(level.height, level.tileSize, 'height'),
   tileSize: level.tileSize,
   playerStart: level.playerStart,
   walls: level.walls.map((w) => ({

@@ -17,6 +17,15 @@ describe('levelToGameStateInput', () => {
     expect(getTile(state.grid, { col: 8, row: 6 })).toBe('brick');
     expect(getTile(state.grid, { col: 15, row: 3 })).toBe('steel');
   });
+
+  it('throws when dimensions are not divisible by tileSize', () => {
+    const uneven = {
+      ...EXAMPLE_LEVEL,
+      width: EXAMPLE_LEVEL.width + 1,
+    };
+
+    expect(() => levelToGameStateInput(uneven)).toThrow(/divisible by tileSize/);
+  });
 });
 
 describe('composeAppRuntime', () => {

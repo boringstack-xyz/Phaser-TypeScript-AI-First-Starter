@@ -5,7 +5,7 @@ import type { TileTypeLookup } from '@domain/wall';
 import { createHudFeature, type IHudRenderer } from '@features/hud';
 import { createInteractionFeature } from '@features/interaction';
 import { createMovementFeature } from '@features/movement';
-import { createSaveGameFeature } from '@features/save-game';
+import { applySave, createSaveGameFeature } from '@features/save-game';
 import { createWallCollisionFeature } from '@features/wall-collision';
 import { createEventBus } from '@shared/events';
 import type { ISaveGamePort } from '@shared/types';
@@ -41,17 +41,6 @@ interface SetupContext {
   readonly scene: Phaser.Scene;
   readonly deps: IWorldSceneDeps;
 }
-
-const applySave = (state: GameState, consumedIds: readonly string[], score: number): GameState => ({
-  ...state,
-  progression: {
-    score,
-    consumedIds: new Set(consumedIds),
-  },
-  interactables: state.interactables.map((i) =>
-    consumedIds.includes(i.id) ? { ...i, consumed: true } : i,
-  ),
-});
 
 export const setupWorldScene = async (ctx: SetupContext): Promise<IWorldSceneRuntime> => {
   configureArcadeWorld(ctx.scene, ctx.deps.levelWidth, ctx.deps.levelHeight);
@@ -89,12 +78,9 @@ export const setupWorldScene = async (ctx: SetupContext): Promise<IWorldSceneRun
   );
 
   const keyboard = ctx.scene.input.keyboard;
-  if (!keyboard) {
-    throw new Error('Keyboard plugin missing — Phaser input.keyboard must be enabled.');
-  }
-
-  keyboard.addKey('S').on('down', () => events.emit('saveGame.requested', {}));
-  keyboard.addKey('R').on('down', () => {
+  // Keyboard is optional (touch-only / headless). Movement already no-ops via the input port.
+  keyboard?.addKey('S').on('down', () => events.emit('saveGame.requested', {}));
+  keyboard?.addKey('R').on('down', () => {
     state = ctx.deps.createState();
     playerEntity.render(state.player);
     wallLayer.redraw(state.grid);
