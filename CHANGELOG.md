@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/compare/v0.1.4...v0.1.5) (2026-08-22)
+
+
+### Bug Fixes
+
+* close OpenSSF and CodeQL code-scanning alerts ([#39](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/issues/39)) ([076d3b2](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/commit/076d3b280dc66da2a8c7e345ac710f020dc4a176))
+
 ## [0.1.4](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/compare/v0.1.3...v0.1.4) (2026-08-22)
 
 
