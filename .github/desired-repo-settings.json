@@ -29,7 +29,7 @@
       "semgrep SAST",
       "analyze (javascript-typescript)"
     ],
-    "required_approving_review_count": 1,
+    "required_approving_review_count": 2,
     "dismiss_stale_reviews": true,
     "require_code_owner_reviews": true,
     "require_last_push_approval": true,
