@@ -101,6 +101,21 @@ have_reviews=$(echo "$PROT_CURRENT" | jq -r '.required_pull_request_reviews.requ
 [[ "$have_reviews" != "$want_reviews" ]] && \
   note_protection "required_approving_review_count = $have_reviews (want $want_reviews)"
 
+want_codeowners=$(echo "$PROT_DESIRED" | jq -r '.require_code_owner_reviews // false')
+have_codeowners=$(echo "$PROT_CURRENT" | jq -r '.required_pull_request_reviews.require_code_owner_reviews // false')
+[[ "$have_codeowners" != "$want_codeowners" ]] && \
+  note_protection "require_code_owner_reviews = $have_codeowners (want $want_codeowners)"
+
+want_last_push=$(echo "$PROT_DESIRED" | jq -r '.require_last_push_approval // false')
+have_last_push=$(echo "$PROT_CURRENT" | jq -r '.required_pull_request_reviews.require_last_push_approval // false')
+[[ "$have_last_push" != "$want_last_push" ]] && \
+  note_protection "require_last_push_approval = $have_last_push (want $want_last_push)"
+
+want_admins=$(echo "$PROT_DESIRED" | jq -r '.enforce_admins // false')
+have_admins=$(echo "$PROT_CURRENT" | jq -r '.enforce_admins.enabled // false')
+[[ "$have_admins" != "$want_admins" ]] && \
+  note_protection "enforce_admins = $have_admins (want $want_admins)"
+
 # required_linear_history
 want_lin=$(echo "$PROT_DESIRED" | jq -r '.required_linear_history')
 have_lin=$(echo "$PROT_CURRENT" | jq -r '.required_linear_history.enabled // false')
@@ -120,8 +135,16 @@ if [[ "$protection_drift" -eq 1 ]]; then
   # Translate desired JSON → PUT body. Reviews count 0 → null (no required reviews).
   rev_count=$(echo "$PROT_DESIRED" | jq -r '.required_approving_review_count')
   if [[ "$rev_count" -gt 0 ]]; then
-    prr_block=$(jq -n --argjson n "$rev_count" \
-      '{required_approving_review_count: $n, dismiss_stale_reviews: true, require_code_owner_reviews: false}')
+    prr_block=$(jq -n \
+      --argjson n "$rev_count" \
+      --argjson owners "$want_codeowners" \
+      --argjson last "$want_last_push" \
+      '{
+        required_approving_review_count: $n,
+        dismiss_stale_reviews: true,
+        require_code_owner_reviews: $owners,
+        require_last_push_approval: $last
+      }')
   else
     prr_block='null'
   fi
@@ -137,11 +160,12 @@ if [[ "$protection_drift" -eq 1 ]]; then
     --argjson rsc "$rsc_block" \
     --argjson prr "$prr_block" \
     --argjson lin "$want_lin" \
+    --argjson admins "$want_admins" \
     --argjson fp "$(echo "$PROT_DESIRED" | jq '.allow_force_pushes')" \
     --argjson del "$(echo "$PROT_DESIRED" | jq '.allow_deletions')" \
     '{
       required_status_checks: $rsc,
-      enforce_admins: false,
+      enforce_admins: $admins,
       required_pull_request_reviews: $prr,
       restrictions: null,
       required_linear_history: $lin,

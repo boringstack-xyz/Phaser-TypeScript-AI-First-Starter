@@ -14,13 +14,15 @@ concurrency:
 
 permissions:
   contents: read
-  security-events: write
 
 jobs:
   scan:
     name: dep vuln scan (osv + audit)
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+    permissions:
+      contents: read
+      security-events: write
 
     env:
       OSV_SCANNER_VERSION: '2.3.8'
