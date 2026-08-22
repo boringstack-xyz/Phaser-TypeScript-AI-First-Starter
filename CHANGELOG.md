@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/compare/v0.1.5...v0.1.6) (2026-08-22)
+
+
+### Bug Fixes
+
+* serve the Pages demo on phaser.boringstack.xyz ([#41](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/issues/41)) ([47000a4](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/commit/47000a491676aa0bbb7b253344a7aedb5d58e073))
+
 ## [0.1.5](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/compare/v0.1.4...v0.1.5) (2026-08-22)
 
 
