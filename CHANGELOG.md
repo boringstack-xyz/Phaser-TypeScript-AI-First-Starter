@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.4](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/compare/v0.1.3...v0.1.4) (2026-08-22)
+
+
+### Features
+
+* confine the template to the tsforge phaser pack ([52c5862](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/commit/52c5862735915877541b0954ab320b658d30433b))
+* confine the template to the tsforge phaser pack ([e2cb5fe](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/commit/e2cb5fed28a1be144e3cb627246adb8ab48b60d0))
+
 ## [0.1.3](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/compare/v0.1.2...v0.1.3) (2026-08-22)
 
 
