@@ -11,8 +11,8 @@ The full architecture layer rules live in `docs/ai/architecture.md`. Summary:
 1. `src/domain/**` is pure. No `phaser` imports. No `Math.random`. No `Date.now`. No `window`, `document`, `localStorage`, `sessionStorage`, `fetch`. If a module needs one of these, it takes a port as a dependency.
 2. Allowed import directions:
    - `app` → everywhere
-   - `features` → domain, runtime, content, shared, features
-   - `runtime` → domain, features (contracts), shared, runtime
+   - `features` → domain, content, shared, features — never runtime
+   - `runtime` → domain, features, content, shared, runtime — never app
    - `domain` → domain, shared
    - `content` → content, shared
    - `shared` → shared only
@@ -26,7 +26,7 @@ See `docs/ai/contribution-contract.md`. Rules 1–10 apply in full and without e
 
 - Every domain behavior function added or modified must have an added or modified unit test.
 - Features require an integration test using fake ports from `@shared/testing`.
-- `pnpm check` must pass before a change is considered done.
+- `bun run check` must pass before a change is considered done.
 
 ## Article IV — Content is schema-validated at import time
 
@@ -34,11 +34,11 @@ All JSON definitions under `src/content/definitions/` are validated by Zod schem
 
 ## Article V — Use generators, not hand-written boilerplate
 
-Before hand-writing a new module, scene, feature, port, content type, or ADR, run the corresponding `pnpm new:*` generator. This keeps structure uniform and reduces the review surface.
+Before hand-writing a new module, scene, feature, port, content type, or ADR, run the corresponding `bun run new:*` generator. This keeps structure uniform and reduces the review surface.
 
 ## Article VI — Architectural deviations require an ADR
 
-If the right thing to do violates one of the above articles, write an ADR with `pnpm new:adr "<Title>"`, have it reviewed, and have it merged in `docs/adr/` before making the change. Silent deviation is a rule violation.
+If the right thing to do violates one of the above articles, write an ADR with `bun run new:adr "<Title>"`, have it reviewed, and have it merged in `docs/adr/` before making the change. Silent deviation is a rule violation.
 
 ## Article VII — The plan is a living document
 

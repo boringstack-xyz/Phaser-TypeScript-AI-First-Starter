@@ -28,4 +28,4 @@ For each failure, point to the file:line and explain which rule it violates and 
 
 Do not modify any files. Read-only review.
 
-Run `pnpm lint src/domain/` and include any lint errors in the report.
+Run `bun run lint src/domain/` and include any lint errors in the report.

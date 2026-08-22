@@ -1,0 +1,7 @@
+# osv-scanner accepted-risk allowlist.
+#
+# Each entry must include reasoning + a re-evaluation date. Re-run
+# `osv-scanner --config=osv-scanner.toml --lockfile=bun.lock` periodically.
+# Prefer package.json overrides over adding an ignore.
+#
+# bun audit is kept in sync via scripts/ci/bun-audit.sh (reads GHSA ids here).

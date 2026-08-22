@@ -18,7 +18,7 @@ Rules:
 
 1. Any change that adds a new layer, pattern, cross-cutting concept, or breaks
    an existing non-negotiable rule requires an ADR before the code change lands.
-2. Use `pnpm new:adr "<Title>"` to scaffold; do not copy-paste an old file.
+2. Use `bun run new:adr "<Title>"` to scaffold; do not copy-paste an old file.
 3. ADRs are immutable once accepted. To supersede, write a new ADR and update
    the old one's Status to "superseded by ADR-NNNN".
 4. PR descriptions that deviate from `docs/ai/contribution-contract.md` must

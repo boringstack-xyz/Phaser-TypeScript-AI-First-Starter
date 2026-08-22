@@ -1,17 +1,16 @@
 import { lookupTileType } from '@content/definitions/tileTypes/index.js';
-import { createGameState, type GameEventMap, type GameState } from '@domain/core';
+import type { GameEventMap, GameState } from '@domain/core';
 import type { InteractableState } from '@domain/interaction';
 import type { TileTypeLookup } from '@domain/wall';
 import { createHudFeature, type IHudRenderer } from '@features/hud';
 import { createInteractionFeature } from '@features/interaction';
 import { createMovementFeature } from '@features/movement';
-import { createSaveGameFeature } from '@features/save-game';
+import { applySave, createSaveGameFeature } from '@features/save-game';
 import { createWallCollisionFeature } from '@features/wall-collision';
 import { createEventBus } from '@shared/events';
 import type { ISaveGamePort } from '@shared/types';
 import type * as Phaser from 'phaser';
 
-import { WORLD_HEIGHT, WORLD_WIDTH } from './WorldScene.constants.js';
 import {
   createInteractableEntity,
   type IInteractableEntity,
@@ -19,12 +18,18 @@ import {
 import { createPlayerEntity, type IPlayerEntity } from '../../entities/PlayerEntity.js';
 import { createWallLayerEntity, type IWallLayerEntity } from '../../entities/WallLayerEntity.js';
 import { createKeyboardInputPort, type IInputPort } from '../../input/keyboardInput.port.js';
+import { configureArcadeWorld } from '../../physics/arcadePhysics.setup.js';
 
 const tileTypes: TileTypeLookup = { get: lookupTileType };
 
 export interface IWorldSceneDeps {
   readonly save: ISaveGamePort;
   readonly hud: IHudRenderer;
+  readonly createState: () => GameState;
+  readonly levelWidth: number;
+  readonly levelHeight: number;
+  readonly playerSpeedPxPerSec: number;
+  readonly pointsPerInteraction: number;
 }
 
 export interface IWorldSceneRuntime {
@@ -38,17 +43,26 @@ interface SetupContext {
 }
 
 export const setupWorldScene = async (ctx: SetupContext): Promise<IWorldSceneRuntime> => {
+  configureArcadeWorld(ctx.scene, ctx.deps.levelWidth, ctx.deps.levelHeight);
+
   const events = createEventBus<GameEventMap>();
   const bounds = {
     min: { x: 16, y: 16 },
-    max: { x: WORLD_WIDTH - 16, y: WORLD_HEIGHT - 16 },
+    max: { x: ctx.deps.levelWidth - 16, y: ctx.deps.levelHeight - 16 },
   };
 
-  let state: GameState = createGameState();
+  let state: GameState = ctx.deps.createState();
 
   const input: IInputPort = createKeyboardInputPort(ctx.scene);
-  const movement = createMovementFeature({ events, bounds });
-  const interaction = createInteractionFeature({ events });
+  const movement = createMovementFeature({
+    events,
+    bounds,
+    speedPxPerSec: ctx.deps.playerSpeedPxPerSec,
+  });
+  const interaction = createInteractionFeature({
+    events,
+    pointsPerInteraction: ctx.deps.pointsPerInteraction,
+  });
   const wallCollision = createWallCollisionFeature({ grid: () => state.grid, tileTypes });
   const hud = createHudFeature({ events, renderer: ctx.deps.hud });
   const save = createSaveGameFeature({
@@ -63,12 +77,11 @@ export const setupWorldScene = async (ctx: SetupContext): Promise<IWorldSceneRun
     state.interactables.map((i) => [i.id, createInteractableEntity(ctx.scene, i)]),
   );
 
-  const saveKey = ctx.scene.input.keyboard?.addKey('S');
-  saveKey?.on('down', () => events.emit('saveGame.requested', {}));
-
-  const resetKey = ctx.scene.input.keyboard?.addKey('R');
-  resetKey?.on('down', () => {
-    state = createGameState();
+  const keyboard = ctx.scene.input.keyboard;
+  // Keyboard is optional (touch-only / headless). Movement already no-ops via the input port.
+  keyboard?.addKey('S').on('down', () => events.emit('saveGame.requested', {}));
+  keyboard?.addKey('R').on('down', () => {
+    state = ctx.deps.createState();
     playerEntity.render(state.player);
     wallLayer.redraw(state.grid);
 
@@ -84,17 +97,8 @@ export const setupWorldScene = async (ctx: SetupContext): Promise<IWorldSceneRun
   });
 
   const loaded = await save.load();
-  if (loaded) {
-    state = {
-      ...state,
-      progression: {
-        score: loaded.score,
-        consumedIds: new Set(loaded.consumedIds),
-      },
-      interactables: state.interactables.map((i) =>
-        loaded.consumedIds.includes(i.id) ? { ...i, consumed: true } : i,
-      ),
-    };
+  if (loaded.ok) {
+    state = applySave(state, loaded.value.consumedIds, loaded.value.score);
 
     for (const i of state.interactables) {
       interactableEntities.get(i.id)?.render(i);

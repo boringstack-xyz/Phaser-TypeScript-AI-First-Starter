@@ -68,6 +68,14 @@ module.exports = {
       to: { path: '^src/app' },
     },
     {
+      name: 'features-cannot-import-runtime',
+      severity: 'error',
+      comment:
+        'Features orchestrate domain + ports. Runtime implements those ports. Do not import runtime from features.',
+      from: { path: '^src/features' },
+      to: { path: '^src/runtime' },
+    },
+    {
       name: 'no-circular',
       severity: 'error',
       comment: 'Circular deps are architectural smell. Refactor.',

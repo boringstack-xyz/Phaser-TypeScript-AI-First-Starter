@@ -1,9 +1,9 @@
 ---
-description: Scaffold a new domain module via pnpm new:module
+description: Scaffold a new domain module via bun run new:module
 argument-hint: <ModuleName>
 ---
 
-Run `pnpm new:module $ARGUMENTS`. Then:
+Run `bun run new:module $ARGUMENTS`. Then:
 
 1. Read `docs/ai/module-template.md` and `docs/ai/naming-conventions.md` if you haven't in this session.
 2. Describe the 8 files that were created.

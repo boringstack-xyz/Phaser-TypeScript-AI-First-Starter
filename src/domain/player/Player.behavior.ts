@@ -21,13 +21,14 @@ export const applyMoveIntent = (
   state: PlayerState,
   intent: MoveIntent,
   deltaMs: number,
+  speedPxPerSec: number = PLAYER_SPEED_PX_PER_SEC,
 ): PlayerState => {
   const dir = normalizeIntent(intent);
-  const step = (deltaMs / 1000) * PLAYER_SPEED_PX_PER_SEC;
+  const step = (deltaMs / 1000) * speedPxPerSec;
 
   return {
     ...state,
-    velocity: vec2(dir.x * PLAYER_SPEED_PX_PER_SEC, dir.y * PLAYER_SPEED_PX_PER_SEC),
+    velocity: vec2(dir.x * speedPxPerSec, dir.y * speedPxPerSec),
     position: vec2(state.position.x + dir.x * step, state.position.y + dir.y * step),
   };
 };

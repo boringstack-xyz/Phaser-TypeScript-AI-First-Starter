@@ -1,41 +1,54 @@
 # AGENTS.md
 
-Tool-neutral AI contributor instructions. Read by Claude Code, Cursor, Copilot, Codex, and similar agents.
+Tool-neutral contract for AI contributors (Claude Code, Cursor, Codex, Copilot, tsforge, others).
 
-**This file mirrors `CLAUDE.md`.** Keep the two in sync — if you change one, change the other.
+This is a **BoringStack** Phaser template (`boringstack-xyz/Phaser-TypeScript-AI-First-Starter`). Before editing, read:
 
----
-
-This is a Phaser + TypeScript game built on an AI-first architecture. Before doing anything, read:
-
-- `docs/ai/architecture.md` — layer diagram and import rules
+- `docs/ai/architecture.md` — layers and import rules
 - `docs/ai/contribution-contract.md` — ten non-negotiable rules
-- `docs/ai/catalog.md` — the canonical index of everything in the codebase
+- `docs/ai/catalog.md` — canonical index of modules, features, scenes, ports, content
 
-## The golden rule
+`bun run check` is the oracle. If prose here disagrees with what `check` says, the tools win — flag the drift.
 
-One obvious home per concern. Do not place domain logic in Phaser scenes. Do not import `phaser` from `src/domain/**`.
+## Golden rule
 
-## Before writing code, check if a generator exists
+One obvious home per concern. Do not place domain logic in Phaser scenes. Do not import `phaser` from `src/domain/**`. Features do not import `src/runtime/**`.
 
-| Intent                 | Command                       |
-| ---------------------- | ----------------------------- |
-| New domain module      | `pnpm new:module <Name>`      |
-| New Phaser scene       | `pnpm new:scene <Name>`       |
-| New feature            | `pnpm new:feature <Name>`     |
-| New port + fake        | `pnpm new:port <Name>`        |
-| New content schema     | `pnpm new:content <Name>`     |
-| New ADR                | `pnpm new:adr "<Title>"`      |
-| Refresh catalog        | `pnpm catalog`                |
+Process-wide ports are constructed in `src/app/composition/`. Scenes read them from the Phaser registry. Do not `new` browser adapters inside a scene.
+
+## Generators (use these; do not hand-write the layout)
+
+| Intent            | Command                    |
+| ----------------- | -------------------------- |
+| New domain module | `bun run new:module <Name>`   |
+| New Phaser scene  | `bun run new:scene <Name>`    |
+| New feature       | `bun run new:feature <Name>`  |
+| New port + fake   | `bun run new:port <Name>`     |
+| New content schema| `bun run new:content <Name>`  |
+| New ADR           | `bun run new:adr "<Title>"`   |
+| Refresh catalog   | `bun run catalog`             |
 
 ## Feature workflow
 
-For non-trivial features: `/speckit:specify` → `/speckit:clarify` → `/speckit:plan` → `/speckit:tasks` → `/speckit:analyze` → `/speckit:implement`. Artifacts land in `docs/specs/<NNN-feature>/`. See `BUILD_THE_GAME.md` for the full walkthrough.
+Non-trivial features: `/speckit:specify` → `:clarify` → `:plan` → `:tasks` → `:analyze` → `:implement`. Artifacts land in `docs/specs/<NNN-feature>/`. Walkthrough: `BUILD_THE_GAME.md`.
 
-## Before claiming done
+Tiny changes (typo, one-liner): skip spec-kit.
+
+## Gate
 
 ```sh
-pnpm check
+bun run check      # typecheck + lint + format + knip + catalog --check + dep-cruise + test
+bun run validate   # check + Playwright smoke
 ```
 
 Must pass. Fix root causes; do not skip hooks.
+
+## tsforge
+
+[tsforge](https://tsforge.dev) is the org TypeScript harness. Point it at a fork of this repo; the gate is `bun run check`.
+
+A Phaser stack adapter (planner schema, conventions, greenfield clone, **Phaser rule pack**) is **planned in tsforge, not shipped**. That pack is what will make this template as enforcement-first as BoringStack: gate + rule-docs, not prose. Until it exists, treat this tree as generic TypeScript and trust `bun run check`. Do **not** add `.tsforge/scaffold-manifest.json` — that file is how tsforge detects the fullstack BoringStack template.
+
+## Deviations
+
+Breaking an architectural rule requires an ADR: `bun run new:adr "<Title>"`. Silent deviation is a rule violation.

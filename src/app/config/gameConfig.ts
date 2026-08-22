@@ -1,17 +1,17 @@
 import * as Phaser from 'phaser';
 
 import { BootScene } from '../../runtime/phaser/scenes/BootScene/index.js';
-import {
-  WorldScene,
-  WORLD_HEIGHT,
-  WORLD_WIDTH,
-} from '../../runtime/phaser/scenes/WorldScene/index.js';
+import { WorldScene } from '../../runtime/phaser/scenes/WorldScene/index.js';
 
-export const createGameConfig = (parent: string | HTMLElement): Phaser.Types.Core.GameConfig => ({
+export const createGameConfig = (
+  parent: string | HTMLElement,
+  width: number,
+  height: number,
+): Phaser.Types.Core.GameConfig => ({
   type: Phaser.AUTO,
   parent,
-  width: WORLD_WIDTH,
-  height: WORLD_HEIGHT,
+  width,
+  height,
   backgroundColor: '#1e1e28',
   pixelArt: true,
   physics: {

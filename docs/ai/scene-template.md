@@ -3,7 +3,7 @@
 **Do not hand-write new scenes. Run:**
 
 ```sh
-pnpm new:scene <Name>
+bun run new:scene <Name>
 ```
 
 ## What scenes are allowed to do

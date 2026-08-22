@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(pnpm:*)",
+      "Bash(bun:*)",
+      "Bash(bunx:*)",
       "Bash(node:*)",
       "Bash(npx playwright:*)",
       "Bash(git status)",

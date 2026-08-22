@@ -5,6 +5,7 @@ import type { InteractionEvent } from '../interaction/Interaction.types.js';
 export const recordInteraction = (
   state: ProgressionState,
   event: InteractionEvent,
+  pointsPerInteraction: number = POINTS_PER_INTERACTION,
 ): ProgressionState => {
   if (state.consumedIds.has(event.interactableId)) {
     return state;
@@ -14,7 +15,7 @@ export const recordInteraction = (
   consumedIds.add(event.interactableId);
 
   return {
-    score: state.score + POINTS_PER_INTERACTION,
+    score: state.score + pointsPerInteraction,
     consumedIds,
   };
 };

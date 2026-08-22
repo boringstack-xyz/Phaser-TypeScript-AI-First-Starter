@@ -1,0 +1,14 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["src/**/*.test.ts", "tests/**/*.ts", "scripts/*.ts"],
+  "project": ["src/**/*.ts", "scripts/**/*.ts", "tests/**/*.ts"],
+  "ignore": [
+    "src/content/definitions/items/**",
+    "src/content/schemas/item.schema.ts",
+    "src/runtime/phaser/audio/**",
+    "src/**/index.ts"
+  ],
+  "ignoreDependencies": ["@commitlint/types"],
+  "ignoreExportsUsedInFile": true,
+  "include": ["files", "dependencies", "unlisted"]
+}

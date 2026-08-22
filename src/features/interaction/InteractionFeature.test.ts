@@ -1,4 +1,6 @@
-import { createGameState, type GameEventMap } from '@domain/core';
+import type { GameEventMap } from '@domain/core';
+import { testGameState } from '@domain/core/testGameState.js';
+import { POINTS_PER_INTERACTION } from '@domain/progression';
 import { createEventBus } from '@shared/events';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -12,18 +14,29 @@ describe('InteractionFeature.tick', () => {
     events.on('interaction.completed', interactionSpy);
     events.on('progression.updated', progressionSpy);
 
-    const feature = createInteractionFeature({ events });
-    const state = createGameState();
+    const feature = createInteractionFeature({
+      events,
+      pointsPerInteraction: POINTS_PER_INTERACTION,
+    });
+    const state = testGameState();
+    const first = state.interactables[0];
+    if (!first) {
+      throw new Error('testGameState must include at least one interactable');
+    }
 
     const overlapping = {
       ...state,
-      player: { ...state.player, position: state.interactables[0]!.position },
+      player: { ...state.player, position: first.position },
     };
     const next = feature.tick(overlapping);
+    const consumed = next.interactables[0];
+    if (!consumed) {
+      throw new Error('expected interactable after tick');
+    }
 
     expect(interactionSpy).toHaveBeenCalledOnce();
     expect(progressionSpy).toHaveBeenCalledWith({ score: 1 });
-    expect(next.interactables[0]!.consumed).toBe(true);
+    expect(consumed.consumed).toBe(true);
     expect(next.progression.score).toBe(1);
   });
 
@@ -32,8 +45,11 @@ describe('InteractionFeature.tick', () => {
     const spy = vi.fn();
     events.on('interaction.completed', spy);
 
-    const feature = createInteractionFeature({ events });
-    const state = createGameState();
+    const feature = createInteractionFeature({
+      events,
+      pointsPerInteraction: POINTS_PER_INTERACTION,
+    });
+    const state = testGameState();
     const next = feature.tick({
       ...state,
       player: { ...state.player, position: { x: -999, y: -999 } },

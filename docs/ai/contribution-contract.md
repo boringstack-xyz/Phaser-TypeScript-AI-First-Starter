@@ -7,16 +7,18 @@ Ten non-negotiable rules for anyone (human or AI) changing this codebase.
 3. **Keep modules small and single-purpose.** If a `*.behavior.ts` file approaches 400 lines, split it.
 4. **Prefer adding a new behavior file over expanding a scene file.**
 5. **Every changed domain behavior must have an added or updated test.**
-6. **Content changes must validate against the schema.** Run `pnpm dev` after editing JSON; validation errors fail early.
+6. **Content changes must validate against the schema.** Run `bun run dev` after editing JSON; validation errors fail early.
 7. **Use the existing file naming conventions exactly.** See `docs/ai/naming-conventions.md`.
-8. **Do not introduce new architectural patterns without an ADR.** Use `pnpm new:adr "<Title>"`.
+8. **Do not introduce new architectural patterns without an ADR.** Use `bun run new:adr "<Title>"`.
 9. **Prefer explicit interfaces over hidden framework magic.** If you need something from the engine, go through a port.
 10. **When in doubt, keep runtime imperative and domain pure.**
 
 ## Before you claim done
 
 ```sh
-pnpm check
+bun run check
 ```
 
-Must pass. Do not `--no-verify` past hooks. Fix the root cause.
+Must pass. `bun run validate` adds Playwright smoke. Do not `--no-verify` past hooks. Fix the root cause.
+
+This template is part of [boringstack-xyz](https://github.com/boringstack-xyz). The fullstack sister is [BoringStack](https://github.com/boringstack-xyz/boringstack); the TypeScript harness is [tsforge](https://tsforge.dev).

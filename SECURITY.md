@@ -22,19 +22,25 @@ Reports are handled on a best-effort basis. This is a starter template, not a pr
 **Out of scope (report upstream):**
 
 - [Phaser](https://github.com/phaserjs/phaser) — report to the Phaser team
-- Node.js, pnpm, Vite, Vitest, ESLint, TypeScript, Zod, Playwright, and other transitive dependencies — report upstream
+- Node.js, Bun, Vite, Vitest, ESLint, TypeScript, Zod, Playwright, and other transitive dependencies — report upstream
 - Vulnerabilities that require you to have already compromised the developer's machine
 - Social engineering of forks
 
 ## Supply-chain hygiene
 
-This template ships with:
+This template ships with the same security triad as BoringStack and tsforge:
 
 - Pinned exact versions in `package.json` (no `^` or `~`)
-- `pnpm audit --prod --audit-level=high` in CI (fails PRs with known high-severity CVEs in production deps)
-- OpenSSF Scorecard workflow (SARIF uploaded to the GitHub security tab)
+- `osv-scanner` on `bun.lock` (fails PRs on un-allowlisted findings)
+- `bun audit --audit-level=high` (ignores stay in lockstep with `osv-scanner.toml` via `scripts/ci/bun-audit.sh`)
+- Semgrep SAST (`p/owasp-top-ten`, `p/javascript`, `p/typescript`)
+- Gitleaks secret scan (pinned CLI, SHA256-verified)
 - CodeQL with `security-and-quality` queries
+- OpenSSF Scorecard (SARIF uploaded on `main`)
 - Dependabot weekly updates
+- Desired GitHub settings in `.github/desired-repo-settings.json` (audit with `./scripts/audit-repo-settings.sh`)
+
+Accepted-risk dependency findings, if any, live in `osv-scanner.toml` with a reason and a re-evaluation date. Prefer `package.json` `overrides` over adding an ignore.
 
 If you fork this template and remove any of these, you're opting out of the baseline we ship with.
 

@@ -13,7 +13,7 @@ export default defineConfig({
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: 'pnpm build && pnpm preview --port 4173',
+    command: 'bun run build && bun run preview --port 4173',
     url: 'http://localhost:4173',
     reuseExistingServer: !process.env['CI'],
     timeout: 120_000,

@@ -31,7 +31,7 @@ export const writeFileSafe = (path: string, contents: string, overwrite = false)
 export const require1Arg = (name: string): string => {
   const arg = process.argv[2];
   if (!arg || arg.startsWith('-')) {
-    console.error(`usage: pnpm ${name} <Name>`);
+    console.error(`usage: bun run ${name} <Name>`);
     process.exit(1);
   }
   return arg;

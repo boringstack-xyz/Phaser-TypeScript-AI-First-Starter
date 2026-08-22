@@ -50,4 +50,6 @@ console.log(`creating feature: ${Name}`);
 for (const [path, body] of Object.entries(files)) {
   writeFileSafe(path, body);
 }
-console.log(`\nDone. Wire the feature into a scene (e.g. src/runtime/phaser/scenes/WorldScene).`);
+console.log(
+  `\nDone. Wire the feature in scene setup (e.g. src/runtime/phaser/scenes/WorldScene/WorldScene.setup.ts). Process-wide ports come from src/app/composition — do not construct adapters in the scene.`,
+);

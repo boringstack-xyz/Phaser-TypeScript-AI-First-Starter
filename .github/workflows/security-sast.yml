@@ -1,0 +1,71 @@
+name: security-sast
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '29 6 * * 1'
+
+concurrency:
+  group: security-sast-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: read
+
+jobs:
+  semgrep:
+    name: semgrep SAST
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container:
+      image: semgrep/semgrep:1.142.0@sha256:03402a5040a88a570dec58375ef1a19fa777dd61575afdc7d5527ddf308dd765
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Trust the runner-prepared workspace
+        run: git config --global --add safe.directory '*'
+
+      - name: Compute baseline
+        id: baseline
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "ref=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run semgrep
+        shell: bash
+        run: |
+          BASELINE="${{ steps.baseline.outputs.ref }}"
+          ARGS=(
+            scan
+            --config=p/owasp-top-ten
+            --config=p/javascript
+            --config=p/typescript
+            --sarif --output=semgrep-results.sarif
+            --error
+            src
+            scripts
+          )
+          if [ -n "$BASELINE" ]; then
+            ARGS+=(--baseline-commit="$BASELINE")
+          fi
+          semgrep "${ARGS[@]}"
+
+      - name: Upload semgrep SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v4.37.8
+        with:
+          sarif_file: semgrep-results.sarif
+          category: semgrep
+        continue-on-error: true

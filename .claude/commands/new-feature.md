@@ -1,9 +1,9 @@
 ---
-description: Scaffold a new feature via pnpm new:feature
+description: Scaffold a new feature via bun run new:feature
 argument-hint: <FeatureName>
 ---
 
-Run `pnpm new:feature $ARGUMENTS`. Then:
+Run `bun run new:feature $ARGUMENTS`. Then:
 
 1. Read `docs/ai/feature-checklist.md` if you haven't in this session.
 2. List the files that were created.

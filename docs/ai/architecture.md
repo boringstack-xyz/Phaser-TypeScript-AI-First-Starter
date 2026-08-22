@@ -20,14 +20,14 @@
 
 ## Allowed import directions
 
-| From       | May import from                                      |
-| ---------- | ---------------------------------------------------- |
-| `app`      | any layer                                            |
-| `features` | `features`, `domain`, `runtime`, `content`, `shared` |
-| `runtime`  | `runtime`, `domain`, `shared`                        |
-| `domain`   | `domain`, `shared`                                   |
-| `content`  | `content`, `shared`                                  |
-| `shared`   | `shared` only — it is a leaf                         |
+| From       | May import from                                                    |
+| ---------- | ------------------------------------------------------------------ |
+| `app`      | any layer                                                          |
+| `features` | `features`, `domain`, `content`, `shared` — never `runtime`        |
+| `runtime`  | `runtime`, `domain`, `features`, `content`, `shared` — never `app` |
+| `domain`   | `domain`, `shared`                                                 |
+| `content`  | `content`, `shared`                                                |
+| `shared`   | `shared` only — it is a leaf                                       |
 
 Violations are lint errors (eslint-plugin-boundaries) and dep-cruiser errors in CI.
 
@@ -40,7 +40,8 @@ Violations are lint errors (eslint-plugin-boundaries) and dep-cruiser errors in 
 | Phaser scenes, sprites, tweens   | `src/runtime/phaser/scenes/<Scene>/`    |
 | Input translation → commands     | `src/runtime/phaser/input/`             |
 | Port interfaces (cross-cutting)  | `src/shared/types/ports.ts`             |
-| Port implementations (browser)   | `src/runtime/adapters/`                 |
+| Port implementations (browser)   | `src/runtime/adapters/` (constructed only in `src/app/composition/`) |
+| Scene wiring                     | `src/runtime/phaser/scenes/<Scene>/<Scene>.setup.ts` |
 | Enemy/item/level definitions     | `src/content/definitions/<kind>/`       |
 | Schemas for content              | `src/content/schemas/`                  |
 | Cross-cutting type utilities     | `src/shared/types/`                     |
@@ -54,4 +55,4 @@ Violations are lint errors (eslint-plugin-boundaries) and dep-cruiser errors in 
 
 ## When the rules feel wrong
 
-Write an ADR in `docs/adr/` with `pnpm new:adr "<Title>"`. Do not silently deviate.
+Write an ADR in `docs/adr/` with `bun run new:adr "<Title>"`. Do not silently deviate.
