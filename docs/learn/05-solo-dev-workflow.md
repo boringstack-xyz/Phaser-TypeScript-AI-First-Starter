@@ -105,7 +105,7 @@ For a 20-minute feature, skip the pipeline. For a 2-day feature, always run it. 
 ### GitHub Pages (this template)
 - Free, one-click
 - Perfect for prototypes, devlogs, and portfolio pieces
-- URL format `https://<user>.github.io/<repo>/` is fine for sharing
+- URL format `https://<user>.github.io/<repo>/` is fine for sharing on a fork. The org demo is [phaser.boringstack.xyz](https://phaser.boringstack.xyz/) so Chrome does not treat `boringstack-xyz.github.io` as a lookalike of `boringstack.xyz`.
 
 ### Your own domain
 - Worth it once you have a name / brand

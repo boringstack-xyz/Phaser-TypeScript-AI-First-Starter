@@ -6,7 +6,8 @@
     "dependabot_security_updates": "enabled"
   },
   "pages": {
-    "build_type": "workflow"
+    "build_type": "workflow",
+    "cname": "phaser.boringstack.xyz"
   },
   "actions": {
     "can_approve_pull_request_reviews": true

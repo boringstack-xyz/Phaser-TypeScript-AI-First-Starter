@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://boringstack.xyz"><img src="https://img.shields.io/badge/boringstack.xyz-4ade80?style=for-the-badge&logo=safari&logoColor=4ade80&labelColor=090909" alt="boringstack.xyz"></a>
   <a href="https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter"><img src="https://img.shields.io/badge/GitHub-2563eb?style=for-the-badge&logo=github&logoColor=2563eb&labelColor=090909" alt="GitHub"></a>
-  <a href="https://boringstack-xyz.github.io/Phaser-TypeScript-AI-First-Starter/"><img src="https://img.shields.io/badge/Play_the_demo-2563eb?style=for-the-badge&logo=phaser&logoColor=2563eb&labelColor=090909" alt="Play the demo"></a>
+  <a href="https://phaser.boringstack.xyz/"><img src="https://img.shields.io/badge/Play_the_demo-2563eb?style=for-the-badge&logo=phaser&logoColor=2563eb&labelColor=090909" alt="Play the demo"></a>
 </p>
 
 <p align="center">
@@ -41,7 +41,7 @@ Backend engineer, tech lead, web developer who always wanted to make games? Star
 
 ### After forking: one-time repo setup
 
-1. **Enable GitHub Pages** — `Settings → Pages → Build and deployment → Source: "GitHub Actions"`. Without this the `deploy-pages` workflow 404s on the first run.
+1. **Enable GitHub Pages** — `Settings → Pages → Build and deployment → Source: "GitHub Actions"`. Without this the `deploy-pages` workflow 404s on the first run. The org demo is served at [phaser.boringstack.xyz](https://phaser.boringstack.xyz/) (Chrome treats `boringstack-xyz.github.io` as a lookalike of `boringstack.xyz`). Forks keep the default `https://<user>.github.io/<repo>/` URL.
 2. **Allow Actions to open PRs** (so release-please can cut release PRs) — `Settings → Actions → General → Workflow permissions → [x] Allow GitHub Actions to create and approve pull requests`.
 3. **Flip "Template repository"** — `Settings → General → Template repository` so your own "Use this template" button works.
 
