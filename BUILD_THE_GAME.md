@@ -102,7 +102,7 @@ There are three GitHub settings the template can't flip for you, because the def
 
 | Setting | Path | Why |
 | --- | --- | --- |
-| **Pages** | Settings → Pages → Build and deployment → Source: **"GitHub Actions"** | The `deploy-pages` workflow 404s without this; the workflow can't enable Pages itself without a broader token. |
+| **Pages** | Settings → Pages → Build and deployment → Source: **"GitHub Actions"** | The `deploy-pages` workflow 404s without this; the workflow can't enable Pages itself without a broader token. The org demo uses the custom domain `phaser.boringstack.xyz` — do **not** copy that CNAME onto a fork. |
 | **Actions may open PRs** | Settings → Actions → General → Workflow permissions → **[x] Allow GitHub Actions to create and approve pull requests** | So `release-please` can cut release PRs from conventional commits. |
 | **Template repository** | Settings → General → **[x] Template repository** | So *your* forkers see the "Use this template" button. |
 
@@ -116,6 +116,17 @@ gh api -X POST /repos/<owner>/<repo>/pages -f 'build_type=workflow'
 gh api -X PUT /repos/<owner>/<repo>/actions/permissions/workflow \
   -f default_workflow_permissions=write -F can_approve_pull_request_reviews=true
 ```
+
+The **org** demo is [phaser.boringstack.xyz](https://phaser.boringstack.xyz/). Chrome flags `boringstack-xyz.github.io` as a lookalike of `boringstack.xyz`, so the Pages site uses a real `boringstack.xyz` subdomain. Cloudflare DNS (DNS-only, not proxied):
+
+```
+Type   CNAME
+Name   phaser
+Target boringstack-xyz.github.io
+Proxy  DNS only
+```
+
+Then in the repo: Settings → Pages → Custom domain `phaser.boringstack.xyz` → Enforce HTTPS once the certificate exists.
 
 ### Step 4 — Understand the demo slice
 
