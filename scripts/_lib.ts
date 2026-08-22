@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 
 export const toPascalCase = (s: string): string =>
@@ -17,13 +17,24 @@ export const toKebabCase = (s: string): string =>
     .replace(/[\s_]+/g, '-')
     .toLowerCase();
 
-export const writeFileSafe = (path: string, contents: string, overwrite = false): boolean => {
-  if (existsSync(path) && !overwrite) {
-    console.warn(`  skip   ${path}  (exists — use --force to overwrite)`);
+const isAlreadyExistsError = (err: unknown): boolean => {
+  if (typeof err !== 'object' || err === null || !('code' in err)) {
     return false;
   }
+  return typeof err.code === 'string' && err.code === 'EEXIST';
+};
+
+export const writeFileSafe = (path: string, contents: string, overwrite = false): boolean => {
   mkdirSync(dirname(path), { recursive: true });
-  writeFileSync(path, contents, 'utf8');
+  try {
+    writeFileSync(path, contents, { encoding: 'utf8', flag: overwrite ? 'w' : 'wx' });
+  } catch (err: unknown) {
+    if (!overwrite && isAlreadyExistsError(err)) {
+      console.warn(`  skip   ${path}  (exists — use --force to overwrite)`);
+      return false;
+    }
+    throw err;
+  }
   console.log(`  write  ${path}`);
   return true;
 };

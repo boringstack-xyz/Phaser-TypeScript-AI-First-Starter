@@ -14,14 +14,16 @@ concurrency:
 
 permissions:
   contents: read
-  security-events: write
-  pull-requests: read
 
 jobs:
   semgrep:
     name: semgrep SAST
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+      pull-requests: read
     container:
       image: semgrep/semgrep:1.142.0@sha256:03402a5040a88a570dec58375ef1a19fa777dd61575afdc7d5527ddf308dd765
 

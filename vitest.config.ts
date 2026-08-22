@@ -16,7 +16,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    include: ['src/**/*.test.ts', 'tests/integration/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'tests/integration/**/*.test.ts', 'scripts/**/*.test.ts'],
     exclude: ['node_modules/**', 'dist/**', 'tests/smoke/**'],
     coverage: {
       provider: 'v8',
