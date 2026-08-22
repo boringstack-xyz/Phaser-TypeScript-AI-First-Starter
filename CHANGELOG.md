@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.3](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/compare/v0.1.2...v0.1.3) (2026-08-22)
+
+
+### Features
+
+* adopt boringstack family conventions, bun, and org security CI ([677d314](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/commit/677d314fc40b6093822b4e4a0c34ff87d4d7fefb))
+* adopt boringstack family conventions, bun, and org security CI ([1ff140f](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/commit/1ff140f5e3e25237213a97a556d831f4eef32829))
+
+
+### Bug Fixes
+
+* address copilot review on registry, save apply, and grid sizing ([fed9f29](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/commit/fed9f294dab3d3314f2da4fb5fb6a24c4b908665))
+
 ## [0.1.2](https://github.com/boringstack-xyz/Phaser-TypeScript-AI-First-Starter/compare/v0.1.1...v0.1.2) (2026-04-22)
 
 
