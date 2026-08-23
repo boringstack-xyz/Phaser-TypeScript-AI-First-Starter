@@ -37,7 +37,7 @@ This repo is part of **[boringstack-xyz](https://github.com/boringstack-xyz)**. 
 
 Backend engineer, tech lead, web developer who always wanted to make games? Start with [`docs/learn/`](./docs/learn/README.md) — a 2.5-hour primer that bridges "I can write code" to "I can generate art, design a core loop, and ship on itch.io."
 
-> **Use this as a GitHub template.** Click **"Use this template"** on the repo page, then read [`BUILD_THE_GAME.md`](./BUILD_THE_GAME.md).
+> Start a new game with [tsforge](https://tsforge.dev) (`/scaffold` → **Phaser**, or `tsforge scaffold --archetype phaser --dest ./my-game`), or click **"Use this template"** on GitHub. Then read [`BUILD_THE_GAME.md`](./BUILD_THE_GAME.md).
 
 ### After forking: one-time repo setup
 
@@ -62,7 +62,7 @@ Everything else (CI, Scorecard, CodeQL, Dependabot) works out of the box. Desire
 | If you are...                             | Read next                                                                                         |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | **A programmer who never shipped a game** | [`docs/learn/`](./docs/learn/README.md)                                                           |
-| **A human forking this to build a game**  | [`BUILD_THE_GAME.md`](./BUILD_THE_GAME.md)                                                        |
+| **A human starting a game (tsforge or GitHub template)** | [`BUILD_THE_GAME.md`](./BUILD_THE_GAME.md)                                               |
 | **An AI agent in a fresh session**        | [`AGENTS.md`](./AGENTS.md) + [`docs/ai/catalog.md`](./docs/ai/catalog.md)                          |
 | **Just evaluating the architecture**      | [`docs/ai/architecture.md`](./docs/ai/architecture.md)                                            |
 | **Looking for the rules**                 | [`docs/ai/contribution-contract.md`](./docs/ai/contribution-contract.md) + [`.specify/memory/constitution.md`](./.specify/memory/constitution.md) |
@@ -80,9 +80,22 @@ Arrow keys or WASD to move. Walk onto a yellow circle to score. Press **S** to s
 
 ## Using tsforge
 
-[tsforge](https://tsforge.dev) is the BoringStack TypeScript build harness. Point it at a fork of this template; the gate is `bun run check`.
+[tsforge](https://tsforge.dev) is the BoringStack TypeScript build harness.
 
-The **`phaser` rule pack** auto-applies from the `phaser` dependency (scene shutdown, no factories in `update`, branded keys). A dedicated Phaser **stack adapter** (planner schema, conventions, greenfield clone) is planned and **not shipped yet**. Do not add a `.tsforge/scaffold-manifest.json` here; that file is how tsforge detects the fullstack template.
+**New game** — same wizard as BoringStack:
+
+```sh
+tsforge scaffold --archetype phaser --dest ./my-game
+# or, in a tsforge session: /scaffold → Phaser → folder name
+cd my-game
+tsforge   # first prompt plans the game (scene / feature / content slices)
+```
+
+No Docker, no `.env`. The clone keeps this template's WASD demo; new work extends it. The gate is `bun run check`. Requires a tsforge build that includes the Phaser adapter (tsforge `main`; the next npm release after 0.51.1).
+
+**Existing clone** — point tsforge at this tree. The **`phaser` rule pack** auto-applies from the `phaser` dependency (scene shutdown, no factories in `update`, branded keys). This repo's `eslint.config.js` covers a syntactic subset of that pack so `bun run check` stays honest without depending on a published tsforge.
+
+Do not add `.tsforge/scaffold-manifest.json` here. That file is how tsforge configures the fullstack BoringStack template. tsforge writes `.tsforge/scaffold.json` (a receipt) after a Phaser scaffold; that is expected.
 
 ## Architecture in 30 seconds
 

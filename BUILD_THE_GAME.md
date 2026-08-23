@@ -1,6 +1,6 @@
 # Build the Game — the AI-First Guide
 
-This document is the end-to-end walkthrough for building a game using this template. It's written for two audiences at once: a human who just clicked **"Use this template"**, and an AI agent that has joined the project mid-flight. Read it front-to-back once; come back for the sections you need.
+This document is the end-to-end walkthrough for building a game using this template. It's written for two audiences at once: a human who just ran tsforge `/scaffold` → Phaser (or clicked **"Use this template"**), and an AI agent that has joined the project mid-flight. Read it front-to-back once; come back for the sections you need.
 
 > **First time making a game?** Read [`docs/learn/`](./docs/learn/README.md) **before** this document. It covers the mental-model shift, AI asset generation, game-design fundamentals, and the solo-dev workflow. This document assumes you already know what a sprite, tilemap, and core loop are. The `learn/` primer will teach you all three in 2.5 hours.
 
@@ -62,9 +62,18 @@ Every non-trivial change walks the same pipeline: specify → clarify → plan �
 
 ## 3. Zero to first commit
 
-### Step 1 — Fork from the template
+### Step 1 — Start from the template
 
-Click **"Use this template"** on the GitHub page. Give your new repo a name. Clone locally.
+**Preferred if you already use tsforge** — same wizard as BoringStack:
+
+```sh
+tsforge scaffold --archetype phaser --dest ./my-game
+cd my-game
+```
+
+Or, in a tsforge session: `/scaffold` → **Phaser** → folder name. That clones this repo, stamps `package.json` `name`, and writes `.tsforge/scaffold.json`. Requires a tsforge with the Phaser adapter (tsforge `main`; next npm release after 0.51.1).
+
+**Otherwise** — click **"Use this template"** on GitHub:
 
 ```sh
 gh repo create my-game --template boringstack-xyz/Phaser-TypeScript-AI-First-Starter --public --clone
@@ -72,6 +81,8 @@ cd my-game
 ```
 
 ### Step 2 — Rename
+
+Skip if you used tsforge scaffold (it already set the package name from the folder).
 
 ```sh
 # Update the package name
@@ -334,16 +345,17 @@ Two faster inner loops:
 
 ## 9.5 Using tsforge
 
-[tsforge](https://tsforge.dev) is the BoringStack TypeScript build harness. After forking:
+[tsforge](https://tsforge.dev) is the BoringStack TypeScript build harness.
+
+To **create** the game, use Step 1 (`/scaffold` → Phaser). Then, from the project folder:
 
 ```sh
-# from the fork
 tsforge
 ```
 
-Point it at this tree. The gate it should run is `bun run check`. The **`phaser` rule pack** auto-applies from the `phaser` dependency (scene shutdown, no factories in `update`, branded keys). This template's ESLint already covers a syntactic subset of that pack.
+The first prompt plans with Phaser view intents (scene / feature / content), not list/detail/form screens. The gate is `bun run check`. The **`phaser` rule pack** auto-applies from the `phaser` dependency (scene shutdown, no factories in `update`, branded keys). This template's ESLint already covers a syntactic subset of that pack.
 
-A dedicated Phaser **adapter** (greenfield clone, planner schema, Phaser conventions instead of React/Elysia) is planned in tsforge and **not shipped**. Do not add `.tsforge/scaffold-manifest.json` here — that file is how tsforge detects the fullstack BoringStack template.
+Do not add `.tsforge/scaffold-manifest.json` here — that file is how tsforge configures the fullstack BoringStack template. After a Phaser scaffold, `.tsforge/scaffold.json` is the receipt that makes tsforge treat this tree as Phaser.
 
 ---
 

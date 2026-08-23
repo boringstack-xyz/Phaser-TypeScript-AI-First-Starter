@@ -45,11 +45,13 @@ Must pass. Fix root causes; do not skip hooks.
 
 ## tsforge
 
-[tsforge](https://tsforge.dev) is the org TypeScript harness. Point it at a fork of this repo; the gate is `bun run check`.
+[tsforge](https://tsforge.dev) is the org TypeScript harness. The gate is `bun run check`.
 
-The **`phaser` rule pack** auto-applies when `phaser` is in package.json: scene SHUTDOWN ownership, no global emitter leaks, no Phaser factories in `update`/`tick`, branded scene/texture keys, no `ignoreDestroy`. This repo's `eslint.config.js` covers a syntactic subset of that pack so `bun run check` stays honest without depending on unpublished tsforge.
+**New game:** `/scaffold` → Phaser (or `tsforge scaffold --archetype phaser --dest ./my-game`). First prompt in that folder plans with a Phaser view-intent schema (scene / feature / content), not SaaS screens. Requires a tsforge with the Phaser adapter (tsforge `main`; next npm release after 0.51.1).
 
-A Phaser **stack adapter** (planner schema, conventions, greenfield clone) is still planned, not shipped. Do **not** add `.tsforge/scaffold-manifest.json` — that file is how tsforge detects the fullstack BoringStack template.
+**This tree:** the **`phaser` rule pack** auto-applies when `phaser` is in package.json (scene SHUTDOWN, no global emitter leaks, no Phaser factories in `update`/`tick`, branded keys, no `ignoreDestroy`). `eslint.config.js` covers a syntactic subset of that pack so `bun run check` stays honest without depending on a published tsforge.
+
+Do **not** add `.tsforge/scaffold-manifest.json` — that file is the fullstack BoringStack env surface. A Phaser scaffold writes `.tsforge/scaffold.json` (receipt); leave it.
 
 ## Deviations
 
