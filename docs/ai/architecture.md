@@ -55,7 +55,7 @@ Violations are lint errors (eslint-plugin-boundaries) and dep-cruiser errors in 
 - **Scene keys are branded constants** (`asSceneKey` in `src/runtime/phaser/scenes/sceneKeys.ts`), never string literals in `scene.start` / `super()`.
 - **Scenes hook `Phaser.Scenes.Events.SHUTDOWN`** and dispose run-lifetime resources there. Do not set `ignoreDestroy`. Do not construct GameObjects in `update()`.
 
-tsforge's `phaser` pack enforces the engine-API subset of these rules when pointed at a fork.
+tsforge's `phaser` pack enforces the engine-API subset of these rules when pointed at this tree. `/scaffold` → Phaser clones this template; do not add `.tsforge/scaffold-manifest.json`.
 
 ## When the rules feel wrong
 
