@@ -1,12 +1,12 @@
 {
-  "lockfileVersion": 1,
+  "lockfileVersion": 3,
   "configVersion": 1,
   "workspaces": {
     "": {
       "name": "phaser-ts-starter",
       "dependencies": {
         "phaser": "4.2.1",
-        "zod": "4.4.3",
+        "zod": "4.6.7",
       },
       "devDependencies": {
         "@commitlint/cli": "21.2.2",
@@ -35,12 +35,18 @@
     },
   },
   "overrides": {
-    "brace-expansion@1": "1.1.18",
-    "brace-expansion@5": "5.0.9",
+    "brace-expansion@1": {
+      ".": "1.1.18",
+    },
+    "brace-expansion@5": {
+      ".": "5.0.9",
+    },
     "esbuild": ">=0.28.1",
     "fast-uri": ">=3.1.5",
     "js-yaml": ">=4.3.1",
-    "nanoid@3": "3.3.18",
+    "nanoid@3": {
+      ".": "3.3.18",
+    },
     "postcss": ">=8.5.23",
     "undici": ">=7.29.0",
   },
@@ -861,7 +867,7 @@
 
     "yocto-queue": ["yocto-queue@0.1.0", "", {}, "sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q=="],
 
-    "zod": ["zod@4.4.3", "", {}, "sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ=="],
+    "zod": ["zod@4.6.7", "", {}, "sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg=="],
 
     "@babel/code-frame/js-tokens": ["js-tokens@4.0.0", "", {}, "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="],
 
